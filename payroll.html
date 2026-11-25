@@ -13,6 +13,7 @@
     <style>
         :root {
             --primary: #2563eb;
+            --primary-dark: #1d4ed8;
             --primary-light: #eff6ff;
             --secondary: #64748b;
             --bg-body: #f8fafc;
@@ -56,7 +57,7 @@
             background-color: var(--primary-light);
         }
         .header-card {
-            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
             border-radius: var(--radius-lg);
             padding: 22px 28px;
             color: white;
@@ -114,7 +115,7 @@
         }
         .btn-tool:hover {
             background: #f8fafc;
-            color: #0d9488;
+            color: var(--primary);
             border-color: #cbd5e1;
             transform: translateY(-1px);
         }
@@ -179,8 +180,8 @@
             font-size: 0.85rem;
         }
         .form-control:focus {
-            border-color: #0d9488;
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
             outline: none;
         }
     </style>
@@ -223,17 +224,17 @@
             <p>Setup, configure and maintain cutoff payout schedules for payroll processing.</p>
         </div>
         <div class="d-none d-md-block text-end">
-            <span class="badge bg-white text-dark px-3 py-2 rounded-pill fw-semibold shadow-sm">
+            <span class="badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
                 <i class="far fa-calendar-days me-1"></i> Total Cutoffs: <span id="totalPeriodsCount">0</span>
             </span>
         </div>
     </div>
 
     <div class="toolbar">
-        <button class="btn-tool text-teal" data-bs-toggle="modal" data-bs-target="#payrollModal">
-            <i class="fas fa-circle-plus text-success"></i> ADD PAYROLL PERIOD
+        <button class="btn-tool" data-bs-toggle="modal" data-bs-target="#payrollModal">
+            <i class="fas fa-circle-plus text-primary"></i> ADD PAYROLL PERIOD
         </button>
-        <a href="attendance.html" class="btn-tool text-primary">
+        <a href="attendance.html" class="btn-tool">
             <i class="fas fa-user-clock text-primary"></i> EMPLOYEE ATTENDANCE
         </a>
     </div>
@@ -267,7 +268,7 @@
         <div class="modal-content">
             <form id="payrollForm">
                 <div class="modal-header">
-                    <h5 class="fw-bold"><i class="fas fa-calendar-plus text-success me-2"></i>New Payroll Period</h5>
+                    <h5 class="fw-bold"><i class="fas fa-calendar-plus text-primary me-2"></i>New Payroll Period</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -285,7 +286,7 @@
                     </div>
                 </div>
                 <div class="modal-footer bg-light">
-                    <button type="submit" class="btn btn-success text-white px-4 fw-semibold">Save Payroll Period</button>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">Save Payroll Period</button>
                     <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -318,7 +319,7 @@ async function loadPeriods() {
             <td class="text-center fw-semibold">${escapeHtml(r.start_date)}</td>
             <td class="text-center fw-semibold">${escapeHtml(r.end_date)}</td>
             <td class="text-center">
-                <span class="badge bg-light text-success border px-3 py-1.5 fw-bold">
+                <span class="badge bg-light text-primary border px-3 py-1.5 fw-bold">
                     <i class="fas fa-check-circle me-1"></i> ${escapeHtml(r.pay_date)}
                 </span>
             </td>
