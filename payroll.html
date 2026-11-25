@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payroll Periods | LCC Admin</title>
+    <title>Payroll Management | LCC Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -87,6 +87,22 @@
             box-shadow: var(--shadow-sm);
             overflow: hidden;
         }
+        .section-card-header {
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 22px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-card-header h6 {
+            margin: 0;
+            font-weight: 700;
+            color: #1e3a8a;
+            font-size: 0.95rem;
+        }
         .toolbar {
             background: #ffffff;
             padding: 12px 20px;
@@ -127,16 +143,16 @@
         .table-custom-main thead th {
             background-color: #f8fafc;
             color: #475569;
-            font-size: 0.76rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 12px 18px;
+            padding: 12px 14px;
             border-bottom: 1.5px solid var(--border-color);
         }
         .table-custom-main tbody td {
-            padding: 12px 18px;
-            font-size: 0.86rem;
+            padding: 12px 14px;
+            font-size: 0.85rem;
             color: #334155;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: middle;
@@ -173,16 +189,29 @@
             background: #f8fafc;
             border-bottom: 1px solid var(--border-color);
         }
-        .form-control {
+        .form-control, .form-select {
             border: 1.5px solid #cbd5e1;
             border-radius: 8px;
             padding: 8px 12px;
             font-size: 0.85rem;
         }
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
             outline: none;
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #payslipPrintArea, #payslipPrintArea * { visibility: visible; }
+            #payslipPrintArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                padding: 25px;
+            }
+            .modal-header, .modal-footer, .btn-close { display: none !important; }
         }
     </style>
 </head>
@@ -220,8 +249,8 @@
 <div class="container-fluid px-4 pb-5">
     <div class="header-card">
         <div>
-            <h4><i class="fas fa-calendar-check"></i> Payroll Period Management</h4>
-            <p>Setup, configure and maintain cutoff payout schedules for payroll processing.</p>
+            <h4><i class="fas fa-file-invoice-dollar"></i> Payroll Management & Salary Computation</h4>
+            <p>Manage cutoff payout schedules and view computed employee salaries & payslips.</p>
         </div>
         <div class="d-none d-md-block text-end">
             <span class="badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
@@ -237,18 +266,61 @@
         <a href="attendance.html" class="btn-tool">
             <i class="fas fa-user-clock text-primary"></i> EMPLOYEE ATTENDANCE
         </a>
+        <a href="reports.html" class="btn-tool">
+            <i class="fas fa-print text-primary"></i> FULL PAYROLL REPORT
+        </a>
     </div>
 
+    <!-- SECTION 1: EMPLOYEE SALARIES / COMPUTATION -->
+    <div class="mgmt-card mb-4" id="salarySection">
+        <div class="section-card-header">
+            <h6><i class="fas fa-money-check-dollar me-2"></i>EMPLOYEE SALARY COMPUTATION</h6>
+            <div class="d-flex align-items-center gap-2">
+                <label class="small fw-bold text-muted text-nowrap">PAY DATE:</label>
+                <select id="salaryPayDateFilter" class="form-select form-select-sm" onchange="renderSalaries()" style="min-width: 180px;"></select>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="table-responsive border rounded-3 shadow-sm">
+                <table class="table-custom-main align-middle">
+                    <thead>
+                        <tr>
+                            <th>Emp ID</th>
+                            <th>Employee Name</th>
+                            <th>Position</th>
+                            <th class="text-end">Daily Rate</th>
+                            <th class="text-end">Basic Pay</th>
+                            <th class="text-end">Overtime</th>
+                            <th class="text-end">Other Income</th>
+                            <th class="text-end text-danger">Tardiness/Abs</th>
+                            <th class="text-end text-danger">Other Ded</th>
+                            <th class="text-end text-primary">Net Pay</th>
+                            <th class="text-center">Payslip</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salaryBody">
+                        <tr><td colspan="11" class="text-center text-muted py-4">Loading employee salaries...</td></tr>
+                    </tbody>
+                    <tfoot id="salaryFoot"></tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: PAYROLL PERIODS -->
     <div class="mgmt-card">
+        <div class="section-card-header">
+            <h6><i class="fas fa-calendar-check me-2"></i>PAYROLL CUTOFF PERIODS</h6>
+        </div>
         <div class="p-4">
             <div class="border rounded-3 overflow-hidden shadow-sm">
                 <table class="table-custom-main align-middle">
                     <thead>
                         <tr>
-                            <th class="text-center" width="25%">Cutoff Start Date</th>
-                            <th class="text-center" width="25%">Cutoff End Date</th>
-                            <th class="text-center" width="35%">Official Payout Date</th>
-                            <th class="text-center" width="15%">Action</th>
+                            <th class="text-center" width="22%">Cutoff Start Date</th>
+                            <th class="text-center" width="22%">Cutoff End Date</th>
+                            <th class="text-center" width="30%">Official Payout Date</th>
+                            <th class="text-center" width="26%">Action</th>
                         </tr>
                     </thead>
                     <tbody id="payrollBody">
@@ -294,27 +366,98 @@
     </div>
 </div>
 
+<!-- MODAL: PRINT EMPLOYEE PAYSLIP -->
+<div class="modal fade" id="payslipModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold"><i class="fas fa-receipt me-2"></i>Official Employee Payslip</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4" id="payslipPrintArea">
+                <div id="payslipContent"></div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-primary px-4 fw-semibold" onclick="window.print()"><i class="fas fa-print me-2"></i>Print Payslip</button>
+                <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="db.js"></script>
 <script>
 requireAuth();
 
-async function loadPeriods() {
-    const { data, error } = await db.from('payroll_periods').select('*').order('id', { ascending: false });
-    const tbody = document.getElementById('payrollBody');
-    if (error) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-danger text-center">${escapeHtml(error.message)}</td></tr>`;
+let cacheData = { periods: [], atts: [], emps: [], empPos: [], inc: [], ded: [], empMap: {}, posMap: {} };
+let computedRows = [];
+
+function fmt(num) {
+    return Number(num || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+async function loadAllPayrollData() {
+    const [
+        { data: periods, error: pErr },
+        { data: atts },
+        { data: emps },
+        { data: empPos },
+        { data: inc },
+        { data: ded }
+    ] = await Promise.all([
+        db.from('payroll_periods').select('*').order('id', { ascending: false }),
+        db.from('attendance').select('*'),
+        db.from('employees').select('*').order('last_name', { ascending: true }),
+        db.from('employee_positions').select('*'),
+        db.from('other_income').select('*'),
+        db.from('other_deductions').select('*')
+    ]);
+
+    if (pErr) {
+        document.getElementById('payrollBody').innerHTML = `<tr><td colspan="4" class="text-danger text-center">${escapeHtml(pErr.message)}</td></tr>`;
         return;
     }
 
-    document.getElementById('totalPeriodsCount').textContent = data.length;
-    if (!data.length) {
+    const empMap = {};
+    (emps || []).forEach(e => { empMap[e.employee_number] = e; });
+    const posMap = {};
+    (empPos || []).forEach(p => { posMap[p.employee_number] = p; });
+
+    cacheData = {
+        periods: periods || [],
+        atts: atts || [],
+        emps: emps || [],
+        empPos: empPos || [],
+        inc: inc || [],
+        ded: ded || [],
+        empMap,
+        posMap
+    };
+
+    renderPeriods();
+
+    const uniqueDates = [...new Set(cacheData.periods.map(p => p.pay_date).filter(Boolean))];
+    const filterSel = document.getElementById('salaryPayDateFilter');
+    const prevVal = filterSel.value;
+    filterSel.innerHTML = '<option value="">-- All Pay Dates --</option>' +
+        uniqueDates.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+    if (prevVal && uniqueDates.includes(prevVal)) filterSel.value = prevVal;
+    else if (uniqueDates.length) filterSel.value = uniqueDates[0];
+
+    renderSalaries();
+}
+
+function renderPeriods() {
+    const tbody = document.getElementById('payrollBody');
+    document.getElementById('totalPeriodsCount').textContent = cacheData.periods.length;
+    if (!cacheData.periods.length) {
         tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-4">No payroll periods set yet.</td></tr>`;
         return;
     }
 
-    tbody.innerHTML = data.map(r => `
+    tbody.innerHTML = cacheData.periods.map(r => `
         <tr>
             <td class="text-center fw-semibold">${escapeHtml(r.start_date)}</td>
             <td class="text-center fw-semibold">${escapeHtml(r.end_date)}</td>
@@ -324,12 +467,164 @@ async function loadPeriods() {
                 </span>
             </td>
             <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="filterByPayDate('${escapeHtml(r.pay_date)}')">
+                    <i class="fas fa-eye me-1"></i> View Salaries
+                </button>
                 <button class="btn-action-del" title="Delete" onclick="deletePeriod(${r.id})">
                     <i class="fas fa-trash-can"></i>
                 </button>
             </td>
         </tr>
     `).join('');
+}
+
+function filterByPayDate(payDate) {
+    document.getElementById('salaryPayDateFilter').value = payDate;
+    renderSalaries();
+    document.getElementById('salarySection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function renderSalaries() {
+    const selectedDate = document.getElementById('salaryPayDateFilter').value;
+    const { empMap, posMap } = cacheData;
+
+    const rows = cacheData.atts
+        .filter(a => !selectedDate || a.pay_date === selectedDate)
+        .sort((a, b) => ((empMap[a.employee_number]?.last_name) || '').localeCompare((empMap[b.employee_number]?.last_name) || ''));
+
+    const tbody = document.getElementById('salaryBody');
+    const tfoot = document.getElementById('salaryFoot');
+
+    if (!rows.length) {
+        computedRows = [];
+        tbody.innerHTML = `<tr><td colspan="11" class="text-center text-muted py-4">No attendance/salary records found for this pay date. Encode attendance first in <b>Attendance</b>.</td></tr>`;
+        tfoot.innerHTML = '';
+        return;
+    }
+
+    let grandNet = 0;
+    computedRows = rows.map(row => {
+        const e = empMap[row.employee_number] || {};
+        const p = posMap[row.employee_number] || {};
+        const otherInc = cacheData.inc
+            .filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date)
+            .reduce((s, x) => s + Number(x.amount || 0), 0);
+        const otherDed = cacheData.ded
+            .filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date)
+            .reduce((s, x) => s + Number(x.amount || 0), 0);
+
+        const dailyRate = Number(row.daily) > 0 ? Number(row.daily) : Number(p.daily || 0);
+        const hourlyRate = dailyRate / 8;
+        const absences = Number(row.absences || 0);
+        const daysWorked = Math.max(0, 13 - absences);
+        const basicPay = daysWorked * dailyRate;
+        const otHours = Number(row.overtime || 0);
+        const otPay = otHours * (hourlyRate * 1.25);
+        const tardyHours = Number(row.tardiness || 0) + Number(row.undertime || 0);
+        const tardyDed = tardyHours * hourlyRate;
+        const netPay = (basicPay + otPay + otherInc) - (tardyDed + otherDed);
+        grandNet += netPay;
+
+        return {
+            empNo: row.employee_number,
+            fullName: e.last_name ? `${e.last_name}, ${e.first_name}` : `Emp #${row.employee_number}`,
+            department: p.department || 'N/A',
+            position: p.position || 'N/A',
+            payDate: row.pay_date,
+            dailyRate,
+            daysWorked,
+            absences,
+            basicPay,
+            otHours,
+            otPay,
+            otherInc,
+            tardyHours,
+            tardyDed,
+            otherDed,
+            netPay
+        };
+    });
+
+    tbody.innerHTML = computedRows.map((c, idx) => `
+        <tr>
+            <td class="fw-bold text-primary">${escapeHtml(c.empNo)}</td>
+            <td class="fw-semibold">${escapeHtml(c.fullName)}</td>
+            <td>${escapeHtml(c.position)}</td>
+            <td class="text-end">₱${fmt(c.dailyRate)}</td>
+            <td class="text-end">₱${fmt(c.basicPay)}</td>
+            <td class="text-end text-success">+₱${fmt(c.otPay)}</td>
+            <td class="text-end text-success">+₱${fmt(c.otherInc)}</td>
+            <td class="text-end text-danger">-₱${fmt(c.tardyDed)}</td>
+            <td class="text-end text-danger">-₱${fmt(c.otherDed)}</td>
+            <td class="text-end fw-bold text-primary" style="font-size: 0.95rem;">₱${fmt(c.netPay)}</td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary" onclick="openPayslip(${idx})">
+                    <i class="fas fa-receipt me-1"></i> Payslip
+                </button>
+            </td>
+        </tr>
+    `).join('');
+
+    tfoot.innerHTML = `
+        <tr class="table-light fw-bold">
+            <td colspan="9" class="text-end">TOTAL PAYROLL DISBURSEMENT:</td>
+            <td class="text-end text-primary" style="font-size: 1.05rem;">₱${fmt(grandNet)}</td>
+            <td></td>
+        </tr>`;
+}
+
+function openPayslip(idx) {
+    const c = computedRows[idx];
+    if (!c) return;
+    const totalEarnings = c.basicPay + c.otPay + c.otherInc;
+    const totalDeductions = c.tardyDed + c.otherDed;
+
+    document.getElementById('payslipContent').innerHTML = `
+        <div class="text-center mb-3 pb-3 border-bottom">
+            <h4 class="fw-bold text-primary mb-1">LCC PAYROLL SYSTEM</h4>
+            <p class="text-muted small mb-0">OFFICIAL EMPLOYEE PAYSLIP</p>
+        </div>
+        <div class="row mb-3 small">
+            <div class="col-6">
+                <div><b>Employee No:</b> ${escapeHtml(c.empNo)}</div>
+                <div><b>Employee Name:</b> ${escapeHtml(c.fullName)}</div>
+            </div>
+            <div class="col-6 text-end">
+                <div><b>Department:</b> ${escapeHtml(c.department)}</div>
+                <div><b>Position:</b> ${escapeHtml(c.position)}</div>
+                <div><b>Pay Date:</b> ${escapeHtml(c.payDate)}</div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <table class="table table-sm table-bordered mb-0">
+                    <thead class="table-light"><tr><th colspan="2" class="text-success">EARNINGS</th></tr></thead>
+                    <tbody>
+                        <tr><td>Basic Pay (${c.daysWorked} days @ ₱${fmt(c.dailyRate)})</td><td class="text-end">₱${fmt(c.basicPay)}</td></tr>
+                        <tr><td>Overtime (${c.otHours} hrs)</td><td class="text-end">₱${fmt(c.otPay)}</td></tr>
+                        <tr><td>Other Income</td><td class="text-end">₱${fmt(c.otherInc)}</td></tr>
+                        <tr class="table-light fw-bold"><td>Total Earnings</td><td class="text-end text-success">₱${fmt(totalEarnings)}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-sm table-bordered mb-0">
+                    <thead class="table-light"><tr><th colspan="2" class="text-danger">DEDUCTIONS</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tardiness / Undertime (${c.tardyHours} hrs)</td><td class="text-end">₱${fmt(c.tardyDed)}</td></tr>
+                        <tr><td>Absences (${c.absences} days deducted from basic)</td><td class="text-end">₱0.00</td></tr>
+                        <tr><td>Other Deductions</td><td class="text-end">₱${fmt(c.otherDed)}</td></tr>
+                        <tr class="table-light fw-bold"><td>Total Deductions</td><td class="text-end text-danger">₱${fmt(totalDeductions)}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="mt-4 p-3 rounded-3 bg-light border d-flex justify-content-between align-items-center">
+            <span class="fw-bold fs-6 text-dark">NET TAKE-HOME PAY:</span>
+            <span class="fw-bold fs-4 text-primary">₱${fmt(c.netPay)}</span>
+        </div>
+    `;
+    new bootstrap.Modal(document.getElementById('payslipModal')).show();
 }
 
 document.getElementById('payrollForm').addEventListener('submit', async (e) => {
@@ -343,16 +638,16 @@ document.getElementById('payrollForm').addEventListener('submit', async (e) => {
     alert('Payroll Period Saved!');
     document.getElementById('payrollForm').reset();
     bootstrap.Modal.getInstance(document.getElementById('payrollModal')).hide();
-    loadPeriods();
+    loadAllPayrollData();
 });
 
 async function deletePeriod(id) {
     if (!confirm('Delete this payroll period?')) return;
     await db.from('payroll_periods').delete().eq('id', id);
-    loadPeriods();
+    loadAllPayrollData();
 }
 
-loadPeriods();
+loadAllPayrollData();
 </script>
 </body>
 </html>
