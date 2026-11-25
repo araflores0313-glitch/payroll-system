@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dept & Position Management | LCC Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --secondary: #64748b;
+            --bg-body: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --radius-lg: 14px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+        }
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            letter-spacing: -0.01em;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .navbar-custom .navbar-brand {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--primary) !important;
+            letter-spacing: -0.5px;
+        }
+        .navbar-custom .nav-link {
+            color: var(--secondary) !important;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 8px 16px !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: var(--primary) !important;
+            background-color: var(--primary-light);
+        }
+        .mgmt-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .mgmt-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+        .card-header-styled {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            padding: 16px 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-header-page2 {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            color: white;
+            padding: 16px 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .form-control, .form-select {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            outline: none;
+        }
+        .table-custom-main {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+        .table-custom-main thead th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
+            border-bottom: 1.5px solid var(--border-color);
+        }
+        .table-custom-main tbody td {
+            padding: 12px 16px;
+            font-size: 0.86rem;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        .table-custom-main tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .table-custom-main tbody tr:hover td {
+            background-color: #f8fafc;
+        }
+        .btn-action-edit {
+            color: var(--primary);
+            background: var(--primary-light);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-action-edit:hover {
+            background: #dbeafe;
+            color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        .btn-action-del {
+            color: #ef4444;
+            background: #fee2e2;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-action-del:hover {
+            background: #fecaca;
+            color: #dc2626;
+            transform: scale(1.05);
+        }
+        .btn-nav-pagination {
+            border-radius: 30px;
+            font-weight: 600;
+            padding: 10px 28px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        .modal-content {
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        .modal-header {
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .modal-header h5 {
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top mb-4">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+            <img src="profiles/logo.png" alt="LCC Logo" style="height: 38px; width: auto; border-radius: 6px;">
+            <span>LCC ADMIN</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto ms-4 gap-1">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> DASHBOARD</a></li>
+                <li class="nav-item"><a class="nav-link" href="employee.html"><i class="fas fa-users me-1"></i> Employees</a></li>
+                <li class="nav-item"><a class="nav-link active text-primary" href="dept.html"><i class="fas fa-sitemap me-1"></i> Dept & Position</a></li>
+                <li class="nav-item"><a class="nav-link" href="loans.html"><i class="fas fa-hand-holding-usd me-1"></i> LOANS</a></li>
+                <li class="nav-item"><a class="nav-link" href="attendance.html"><i class="fas fa-user-clock me-1"></i> ATTENDANCE</a></li>
+                <li class="nav-item"><a class="nav-link" href="payroll.html"><i class="fas fa-file-invoice-dollar me-1"></i> PAYROLL</a></li>
+                <li class="nav-item"><a class="nav-link" href="reports.html"><i class="fas fa-chart-line me-1"></i> Reports</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center text-muted small bg-light py-1 px-3 rounded-pill border">
+                    <span class="rounded-circle bg-success me-2" style="width: 8px; height: 8px;"></span>
+                    <span>Admin Session</span>
+                </div>
+                <button onclick="logoutAdmin()" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 fw-semibold">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 pb-5">
+
+    <!-- PAGE 1: DEPARTMENT AT POSITION -->
+    <div id="page1Section">
+        <div class="row g-4">
+            <!-- DEPARTMENT MANAGEMENT -->
+            <div class="col-lg-6">
+                <div class="mgmt-card">
+                    <div class="card-header-styled">
+                        <span><i class="fas fa-building me-2"></i> DEPARTMENT MANAGEMENT</span>
+                        <span class="badge bg-white text-primary rounded-pill px-2.5 py-1 small" id="deptTotalBadge">0 Total</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+                            <button class="btn btn-primary btn-sm px-3 fw-semibold shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#addDeptModal">
+                                <i class="fas fa-plus-circle me-1"></i> New Dept
+                            </button>
+                            <div class="d-flex gap-2">
+                                <input type="text" id="searchDept" class="form-control form-control-sm" placeholder="Search department..." oninput="loadDepts()">
+                            </div>
+                        </div>
+                        <div class="border rounded-3 overflow-hidden shadow-sm">
+                            <table class="table-custom-main">
+                                <thead>
+                                    <tr>
+                                        <th>Department Name</th>
+                                        <th class="text-center" width="120">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="deptTableBody">
+                                    <tr><td colspan="2" class="text-center text-muted py-4">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POSITION MANAGEMENT -->
+            <div class="col-lg-6">
+                <div class="mgmt-card">
+                    <div class="card-header-styled">
+                        <span><i class="fas fa-id-badge me-2"></i> POSITION MANAGEMENT</span>
+                        <span class="badge bg-white text-primary rounded-pill px-2.5 py-1 small" id="posTotalBadge">0 Total</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+                            <button class="btn btn-primary btn-sm px-3 fw-semibold shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#addPosModal">
+                                <i class="fas fa-plus-circle me-1"></i> New Position
+                            </button>
+                            <div class="d-flex gap-2">
+                                <input type="text" id="searchPos" class="form-control form-control-sm" placeholder="Search position..." oninput="loadPositions()">
+                            </div>
+                        </div>
+                        <div class="border rounded-3 overflow-hidden shadow-sm">
+                            <table class="table-custom-main">
+                                <thead>
+                                    <tr>
+                                        <th>Position Name</th>
+                                        <th class="text-center" width="120">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="posTableBody">
+                                    <tr><td colspan="2" class="text-center text-muted py-4">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <button onclick="switchPage(2)" class="btn btn-primary btn-nav-pagination shadow">
+                <i class="fas fa-arrow-right-arrow-left me-2"></i> PROCEED TO OTHER INCOME & DEDUCTIONS <i class="fas fa-chevron-right ms-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- PAGE 2: OTHER INCOME & DEDUCTION -->
+    <div id="page2Section" style="display: none;">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="mgmt-card">
+                    <div class="card-header-page2">
+                        <span><i class="fas fa-hand-holding-dollar me-2"></i> OTHER INCOME ENTRIES</span>
+                        <button class="btn btn-light btn-sm text-teal fw-semibold rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addOtherIncModal">
+                            <i class="fas fa-plus-circle me-1"></i> Add Income
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <div class="border rounded-3 overflow-hidden shadow-sm">
+                            <table class="table-custom-main text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Emp No.</th>
+                                        <th>Pay Date</th>
+                                        <th>Income Type</th>
+                                        <th>Amount</th>
+                                        <th width="80">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="otherIncBody">
+                                    <tr><td colspan="5" class="py-4 text-muted">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mgmt-card">
+                    <div class="card-header-styled">
+                        <span><i class="fas fa-file-invoice-dollar me-2"></i> OTHER DEDUCTION ENTRIES</span>
+                        <button class="btn btn-light btn-sm text-primary fw-semibold rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addOtherDedModal">
+                            <i class="fas fa-plus-circle me-1"></i> Add Deduction
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <div class="border rounded-3 overflow-hidden shadow-sm">
+                            <table class="table-custom-main text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Emp No.</th>
+                                        <th>Pay Date</th>
+                                        <th>Deduction Type</th>
+                                        <th>Amount</th>
+                                        <th width="80">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="otherDedBody">
+                                    <tr><td colspan="5" class="py-4 text-muted">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 mb-4">
+            <button onclick="switchPage(1)" class="btn btn-secondary btn-nav-pagination shadow">
+                <i class="fas fa-chevron-left me-2"></i> BACK TO DEPT & POSITIONS
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" id="addDeptModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="addDeptForm">
+                <div class="modal-header">
+                    <h5><i class="fas fa-building text-primary me-2"></i>Add Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <label class="form-label small fw-bold text-muted">DEPARTMENT NAME</label>
+                    <input type="text" id="newDeptName" class="form-control" placeholder="e.g. Accounting, Human Resources" required>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">Save Department</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editDeptModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="editDeptForm">
+                <input type="hidden" id="editDeptId">
+                <div class="modal-header">
+                    <h5><i class="fas fa-pen text-primary me-2"></i>Edit Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <label class="form-label small fw-bold text-muted">DEPARTMENT NAME</label>
+                    <input type="text" id="editDeptName" class="form-control" required>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="submit" class="btn btn-primary px-4">Update Department</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addPosModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="addPosForm">
+                <div class="modal-header">
+                    <h5><i class="fas fa-id-badge text-primary me-2"></i>Add Position</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <label class="form-label small fw-bold text-muted">POSITION TITLE</label>
+                    <input type="text" id="newPosName" class="form-control" placeholder="e.g. Senior Accountant, Instructor" required>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">Save Position</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editPosModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="editPosForm">
+                <input type="hidden" id="editPosId">
+                <div class="modal-header">
+                    <h5><i class="fas fa-pen text-primary me-2"></i>Edit Position</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <label class="form-label small fw-bold text-muted">POSITION NAME</label>
+                    <input type="text" id="editPosName" class="form-control" required>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="submit" class="btn btn-primary px-4">Update Position</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addOtherIncModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="addOtherIncForm">
+                <div class="modal-header">
+                    <h5><i class="fas fa-hand-holding-dollar text-success me-2"></i>Add Other Income</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">SELECT EMPLOYEE</label>
+                        <select id="incEmpNo" class="form-select emp-dropdown" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">PAY DATE</label>
+                        <input type="date" id="incPayDate" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">INCOME TYPE</label>
+                        <input type="text" id="incType" class="form-control" placeholder="e.g. Overtime, Incentive" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">AMOUNT (₱)</label>
+                        <input type="number" step="0.01" id="incAmount" class="form-control" placeholder="0.00" required>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="submit" class="btn btn-success text-white px-4 fw-semibold">Save Income</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addOtherDedModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="addOtherDedForm">
+                <div class="modal-header">
+                    <h5><i class="fas fa-file-invoice-dollar text-danger me-2"></i>Add Other Deduction</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">SELECT EMPLOYEE</label>
+                        <select id="dedEmpNo" class="form-select emp-dropdown" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">PAY DATE</label>
+                        <input type="date" id="dedPayDate" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">DEDUCTION TYPE</label>
+                        <input type="text" id="dedType" class="form-control" placeholder="e.g. Uniform, Cash Advance" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">AMOUNT (₱)</label>
+                        <input type="number" step="0.01" id="dedAmount" class="form-control" placeholder="0.00" required>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="submit" class="btn btn-danger px-4 fw-semibold">Save Deduction</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="db.js"></script>
+<script>
+requireAuth();
+
+let allDepts = [];
+let allPos = [];
+
+function switchPage(p) {
+    document.getElementById("page1Section").style.display = (p === 1) ? "block" : "none";
+    document.getElementById("page2Section").style.display = (p === 2) ? "block" : "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function loadDepts() {
+    const keyword = document.getElementById("searchDept").value.trim();
+    let query = db.from("departments").select("*").order("dept_name", { ascending: true });
+    if (keyword) query = query.ilike("dept_name", `%${keyword}%`);
+
+    const { data, error } = await query;
+    const tbody = document.getElementById("deptTableBody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="2" class="text-danger text-center">${escapeHtml(error.message)}</td></tr>`;
+        return;
+    }
+
+    allDepts = data || [];
+    document.getElementById("deptTotalBadge").textContent = `${allDepts.length} Total`;
+    if (allDepts.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-4">No department records found.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = allDepts.map(row => `
+        <tr>
+            <td class="fw-semibold text-dark">${escapeHtml(row.dept_name)}</td>
+            <td class="text-center">
+                <button class="btn-action-edit me-1" title="Edit" onclick="openEditDept(${row.id})"><i class="fas fa-pen-to-square"></i></button>
+                <button class="btn-action-del" title="Delete" onclick="deleteDept(${row.id})"><i class="fas fa-trash-can"></i></button>
+            </td>
+        </tr>
+    `).join("");
+}
+
+document.getElementById("addDeptForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const dept_name = document.getElementById("newDeptName").value.trim();
+    const { error } = await db.from("departments").insert({ dept_name });
+    if (error) return alert(error.message);
+    document.getElementById("newDeptName").value = "";
+    bootstrap.Modal.getInstance(document.getElementById("addDeptModal")).hide();
+    loadDepts();
+});
+
+function openEditDept(id) {
+    const row = allDepts.find(d => d.id === id);
+    if (!row) return;
+    document.getElementById("editDeptId").value = row.id;
+    document.getElementById("editDeptName").value = row.dept_name;
+    new bootstrap.Modal(document.getElementById("editDeptModal")).show();
+}
+
+document.getElementById("editDeptForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const id = document.getElementById("editDeptId").value;
+    const dept_name = document.getElementById("editDeptName").value.trim();
+    const { error } = await db.from("departments").update({ dept_name }).eq("id", id);
+    if (error) return alert(error.message);
+    bootstrap.Modal.getInstance(document.getElementById("editDeptModal")).hide();
+    loadDepts();
+});
+
+async function deleteDept(id) {
+    if (!confirm("Sigurado ka ba?")) return;
+    const { error } = await db.from("departments").delete().eq("id", id);
+    if (error) return alert(error.message);
+    loadDepts();
+}
+
+async function loadPositions() {
+    const keyword = document.getElementById("searchPos").value.trim();
+    let query = db.from("positions").select("*").order("pos_name", { ascending: true });
+    if (keyword) query = query.ilike("pos_name", `%${keyword}%`);
+
+    const { data, error } = await query;
+    const tbody = document.getElementById("posTableBody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="2" class="text-danger text-center">${escapeHtml(error.message)}</td></tr>`;
+        return;
+    }
+
+    allPos = data || [];
+    document.getElementById("posTotalBadge").textContent = `${allPos.length} Total`;
+    if (allPos.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-4">No position records found.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = allPos.map(row => `
+        <tr>
+            <td class="fw-semibold text-dark">${escapeHtml(row.pos_name)}</td>
+            <td class="text-center">
+                <button class="btn-action-edit me-1" title="Edit" onclick="openEditPos(${row.id})"><i class="fas fa-pen-to-square"></i></button>
+                <button class="btn-action-del" title="Delete" onclick="deletePos(${row.id})"><i class="fas fa-trash-can"></i></button>
+            </td>
+        </tr>
+    `).join("");
+}
+
+document.getElementById("addPosForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const pos_name = document.getElementById("newPosName").value.trim();
+    const { error } = await db.from("positions").insert({ pos_name });
+    if (error) return alert(error.message);
+    document.getElementById("newPosName").value = "";
+    bootstrap.Modal.getInstance(document.getElementById("addPosModal")).hide();
+    loadPositions();
+});
+
+function openEditPos(id) {
+    const row = allPos.find(p => p.id === id);
+    if (!row) return;
+    document.getElementById("editPosId").value = row.id;
+    document.getElementById("editPosName").value = row.pos_name;
+    new bootstrap.Modal(document.getElementById("editPosModal")).show();
+}
+
+document.getElementById("editPosForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const id = document.getElementById("editPosId").value;
+    const pos_name = document.getElementById("editPosName").value.trim();
+    const { error } = await db.from("positions").update({ pos_name }).eq("id", id);
+    if (error) return alert(error.message);
+    bootstrap.Modal.getInstance(document.getElementById("editPosModal")).hide();
+    loadPositions();
+});
+
+async function deletePos(id) {
+    if (!confirm("Sigurado ka ba?")) return;
+    const { error } = await db.from("positions").delete().eq("id", id);
+    if (error) return alert(error.message);
+    loadPositions();
+}
+
+async function loadEmployeeDropdowns() {
+    const { data } = await db.from("employees").select("employee_number, last_name, first_name").order("last_name", { ascending: true });
+    const opts = '<option value="">-- Select Employee --</option>' + (data || []).map(e =>
+        `<option value="${escapeHtml(e.employee_number)}">${escapeHtml(e.employee_number)} - ${escapeHtml(e.last_name)}, ${escapeHtml(e.first_name)}</option>`
+    ).join("");
+    document.querySelectorAll(".emp-dropdown").forEach(sel => sel.innerHTML = opts);
+}
+
+async function loadOtherIncome() {
+    const { data, error } = await db.from("other_income").select("*").order("id", { ascending: false });
+    const tbody = document.getElementById("otherIncBody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-danger">${escapeHtml(error.message)}</td></tr>`;
+        return;
+    }
+    if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-muted">No other income records registered.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.map(r => `
+        <tr>
+            <td class="fw-bold text-primary">${escapeHtml(r.employee_number)}</td>
+            <td>${escapeHtml(r.pay_date)}</td>
+            <td><span class="badge bg-light text-dark border">${escapeHtml(r.income_type)}</span></td>
+            <td class="fw-semibold text-success">₱${Number(r.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td><button class="btn-action-del" title="Delete" onclick="deleteOtherIncome(${r.id})"><i class="fas fa-trash-can"></i></button></td>
+        </tr>
+    `).join("");
+}
+
+async function loadOtherDeductions() {
+    const { data, error } = await db.from("other_deductions").select("*").order("id", { ascending: false });
+    const tbody = document.getElementById("otherDedBody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-danger">${escapeHtml(error.message)}</td></tr>`;
+        return;
+    }
+    if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-muted">No other deduction records registered.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.map(r => `
+        <tr>
+            <td class="fw-bold text-primary">${escapeHtml(r.employee_number)}</td>
+            <td>${escapeHtml(r.pay_date)}</td>
+            <td><span class="badge bg-light text-dark border">${escapeHtml(r.deduction_type)}</span></td>
+            <td class="fw-semibold text-danger">-₱${Number(r.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td><button class="btn-action-del" title="Delete" onclick="deleteOtherDeduction(${r.id})"><i class="fas fa-trash-can"></i></button></td>
+        </tr>
+    `).join("");
+}
+
+document.getElementById("addOtherIncForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const { error } = await db.from("other_income").insert({
+        employee_number: document.getElementById("incEmpNo").value,
+        pay_date: document.getElementById("incPayDate").value || null,
+        income_type: document.getElementById("incType").value.trim(),
+        amount: parseFloat(document.getElementById("incAmount").value) || 0
+    });
+    if (error) return alert(error.message);
+    document.getElementById("addOtherIncForm").reset();
+    bootstrap.Modal.getInstance(document.getElementById("addOtherIncModal")).hide();
+    loadOtherIncome();
+});
+
+document.getElementById("addOtherDedForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const { error } = await db.from("other_deductions").insert({
+        employee_number: document.getElementById("dedEmpNo").value,
+        pay_date: document.getElementById("dedPayDate").value || null,
+        deduction_type: document.getElementById("dedType").value.trim(),
+        amount: parseFloat(document.getElementById("dedAmount").value) || 0
+    });
+    if (error) return alert(error.message);
+    document.getElementById("addOtherDedForm").reset();
+    bootstrap.Modal.getInstance(document.getElementById("addOtherDedModal")).hide();
+    loadOtherDeductions();
+});
+
+async function deleteOtherIncome(id) {
+    if (!confirm("Sigurado ka ba?")) return;
+    await db.from("other_income").delete().eq("id", id);
+    loadOtherIncome();
+}
+
+async function deleteOtherDeduction(id) {
+    if (!confirm("Sigurado ka ba?")) return;
+    await db.from("other_deductions").delete().eq("id", id);
+    loadOtherDeductions();
+}
+
+loadDepts();
+loadPositions();
+loadEmployeeDropdowns();
+loadOtherIncome();
+loadOtherDeductions();
+</script>
+</body>
+</html>

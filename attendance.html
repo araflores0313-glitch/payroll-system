@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attendance | LCC Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --teal-custom: #0f766e;
+            --secondary: #64748b;
+            --bg-body: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --radius-lg: 14px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+        }
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            letter-spacing: -0.01em;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .navbar-custom .navbar-brand {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--primary) !important;
+            letter-spacing: -0.5px;
+        }
+        .navbar-custom .nav-link {
+            color: var(--secondary) !important;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 8px 16px !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: var(--primary) !important;
+            background-color: var(--primary-light);
+        }
+        .header-card {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            border-radius: var(--radius-lg);
+            padding: 22px 28px;
+            color: white;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-card h4 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.35rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-card p {
+            margin: 4px 0 0 0;
+            font-size: 0.82rem;
+            opacity: 0.9;
+        }
+        .toolbar {
+            background: #ffffff;
+            padding: 12px 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+        .btn-tool {
+            background: #ffffff;
+            color: #334155;
+            border: 1px solid var(--border-color);
+            font-size: 0.82rem;
+            padding: 8px 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-tool:hover {
+            background: #f8fafc;
+            color: var(--teal-custom);
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+        .mgmt-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        .table-custom-main {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+        .table-custom-main thead th {
+            background-color: #0f766e;
+            color: #ffffff;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 13px 16px;
+            border: none;
+            text-align: center;
+        }
+        .table-custom-main tbody td {
+            padding: 13px 16px;
+            font-size: 0.86rem;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .table-custom-main tbody tr:hover td {
+            background-color: #f8fafc;
+        }
+        .btn-action-edit {
+            color: #0f766e;
+            background: #ccfbf1;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-action-edit:hover {
+            background: #99f6e4;
+            color: #115e59;
+            transform: scale(1.05);
+        }
+        .btn-action-del {
+            color: #ef4444;
+            background: #fee2e2;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-action-del:hover {
+            background: #fecaca;
+            color: #dc2626;
+            transform: scale(1.05);
+        }
+        .modal-content {
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        .modal-header {
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .form-label {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 5px;
+        }
+        .form-control, .form-select {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #0d9488;
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top mb-4">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+            <img src="profiles/logo.png" alt="LCC Logo" style="height: 38px; width: auto; border-radius: 6px;">
+            <span>LCC ADMIN</span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto ms-4 gap-1">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> DASHBOARD</a></li>
+                <li class="nav-item"><a class="nav-link" href="employee.html"><i class="fas fa-users me-1"></i> Employees</a></li>
+                <li class="nav-item"><a class="nav-link" href="dept.html"><i class="fas fa-sitemap me-1"></i> Dept & Position</a></li>
+                <li class="nav-item"><a class="nav-link" href="loans.html"><i class="fas fa-hand-holding-usd me-1"></i> Loans</a></li>
+                <li class="nav-item"><a class="nav-link active text-primary" href="attendance.html"><i class="fas fa-user-clock me-1"></i> Attendance</a></li>
+                <li class="nav-item"><a class="nav-link" href="payroll.html"><i class="fas fa-file-invoice-dollar me-1"></i> Payroll</a></li>
+                <li class="nav-item"><a class="nav-link" href="reports.html"><i class="fas fa-chart-line me-1"></i> Reports</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center text-muted small bg-light py-1 px-3 rounded-pill border">
+                    <span class="rounded-circle bg-success me-2" style="width: 8px; height: 8px;"></span>
+                    <span>Admin Session</span>
+                </div>
+                <button onclick="logoutAdmin()" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 fw-semibold">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="header-card">
+        <div>
+            <h4><i class="fas fa-clipboard-user"></i> EMPLOYEE ATTENDANCE</h4>
+            <p>Encode, manage, and verify daily employee attendance, absences, undertime, and overtime.</p>
+        </div>
+        <div class="d-none d-md-block text-end">
+            <span class="badge bg-white text-dark px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.95rem;">
+                <i class="fas fa-clock-rotate-left text-teal me-1"></i> Total Encoded: <span id="totalAttCount">0</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <div class="d-flex gap-2">
+            <button class="btn-tool text-teal fw-bold" onclick="openAttendanceModal()">
+                <i class="fas fa-plus-circle text-success"></i> Add New Attendance
+            </button>
+            <a href="payroll.html" class="btn-tool">
+                <i class="fas fa-calendar-check text-primary"></i> Cutoff Schedules
+            </a>
+        </div>
+
+        <div class="d-flex gap-2 align-items-center">
+            <input type="text" id="searchAtt" class="form-control form-control-sm" placeholder="Search employee / date..." oninput="renderAttendance()" style="width: 220px;">
+        </div>
+    </div>
+
+    <div class="mgmt-card">
+        <div class="p-4">
+            <div class="border rounded-3 overflow-hidden shadow-sm">
+                <table class="table-custom-main align-middle">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; width: 22%;">EMPLOYEE NAME</th>
+                            <th width="12%">PAY DATE</th>
+                            <th width="10%">DAILY</th>
+                            <th width="10%">ABSENCES</th>
+                            <th width="11%">TARDINESS</th>
+                            <th width="11%">UNDER TIME</th>
+                            <th width="11%">OVER TIME</th>
+                            <th width="13%">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-5">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: ADD / EDIT ATTENDANCE -->
+<div class="modal fade" id="attendanceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="attendanceForm">
+                <input type="hidden" id="att_id" value="">
+
+                <div class="modal-header">
+                    <h5 class="fw-bold text-teal" id="modalTitle"><i class="fas fa-clock text-teal me-2"></i>EMPLOYEE ATTENDANCE</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label">Pay Date</label>
+                        <select id="inp_pay_date" class="form-select" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Employee Name</label>
+                        <select id="inp_employee" class="form-select" onchange="autoFetchDailyRate()" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Daily (₱)</label>
+                        <input type="number" step="0.01" id="inp_daily" class="form-control" placeholder="0.00" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Absences</label>
+                        <input type="number" step="0.5" id="inp_absences" class="form-control" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tardiness (Mins/Hrs)</label>
+                        <input type="number" step="0.01" id="inp_tardiness" class="form-control" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Under Time (Mins/Hrs)</label>
+                        <input type="number" step="0.01" id="inp_undertime" class="form-control" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Over Time (Hours)</label>
+                        <input type="number" step="0.01" id="inp_overtime" class="form-control" value="0">
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light">
+                    <button type="submit" class="btn btn-success text-white px-4 fw-semibold">SAVE</button>
+                    <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">CANCEL</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="db.js"></script>
+<script>
+requireAuth();
+
+let allAttendance = [];
+let empMap = {};
+
+async function loadData() {
+    const [{ data: atts }, { data: emps }, { data: posList }, { data: periods }] = await Promise.all([
+        db.from('attendance').select('*').order('pay_date', { ascending: false }).order('id', { ascending: false }),
+        db.from('employees').select('*').order('last_name', { ascending: true }),
+        db.from('employee_positions').select('*'),
+        db.from('payroll_periods').select('pay_date').order('pay_date', { ascending: false })
+    ]);
+
+    const posMap = {};
+    (posList || []).forEach(p => { posMap[p.employee_number] = p; });
+    empMap = {};
+    (emps || []).forEach(e => { empMap[e.employee_number] = e; });
+
+    allAttendance = atts || [];
+    document.getElementById('totalAttCount').textContent = allAttendance.length;
+
+    const uniqueDates = [...new Set((periods || []).map(p => p.pay_date).filter(Boolean))];
+    document.getElementById('inp_pay_date').innerHTML = '<option value="">-- Select Pay Date --</option>' +
+        uniqueDates.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+
+    document.getElementById('inp_employee').innerHTML = '<option value="" data-daily="0.00">-- Select Employee --</option>' +
+        (emps || []).map(e => {
+            const dRate = (posMap[e.employee_number] && posMap[e.employee_number].daily) ? posMap[e.employee_number].daily : '0.00';
+            return `<option value="${escapeHtml(e.employee_number)}" data-daily="${dRate}">${escapeHtml(e.last_name)}, ${escapeHtml(e.first_name)} (${escapeHtml(e.employee_number)})</option>`;
+        }).join('');
+
+    renderAttendance();
+}
+
+function renderAttendance() {
+    const q = document.getElementById('searchAtt').value.trim().toLowerCase();
+    const filtered = allAttendance.filter(row => {
+        if (!q) return true;
+        const e = empMap[row.employee_number] || {};
+        const name = `${e.last_name || ''} ${e.first_name || ''}`.toLowerCase();
+        return name.includes(q) || (row.employee_number || '').toLowerCase().includes(q) || (row.pay_date || '').includes(q);
+    });
+
+    const tbody = document.getElementById('attTableBody');
+    if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-5"><i class="fas fa-clipboard-list fa-2x mb-3 text-secondary d-block"></i>No attendance data available in table</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(row => {
+        const e = empMap[row.employee_number];
+        const fullName = e ? `${e.last_name}, ${e.first_name}` : `Emp #${row.employee_number}`;
+        return `<tr>
+            <td style="text-align: left;">
+                <div class="fw-bold text-dark">${escapeHtml(fullName)}</div>
+                <span class="badge bg-light text-primary border" style="font-size: 0.72rem;">${escapeHtml(row.employee_number)}</span>
+            </td>
+            <td><span class="badge bg-light text-dark border px-2.5 py-1 fw-semibold">${escapeHtml(row.pay_date)}</span></td>
+            <td class="fw-bold text-success">₱${Number(row.daily || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td><span class="${row.absences > 0 ? 'text-danger fw-bold' : 'text-muted'}">${escapeHtml(row.absences)}</span></td>
+            <td>${escapeHtml(row.tardiness)}</td>
+            <td>${escapeHtml(row.undertime)}</td>
+            <td><span class="${row.overtime > 0 ? 'text-primary fw-bold' : 'text-muted'}">${escapeHtml(row.overtime)}</span></td>
+            <td>
+                <button type="button" class="btn-action-edit me-1" title="Edit" onclick="editAttendance(${row.id})">
+                    <i class="fas fa-pen-to-square"></i>
+                </button>
+                <button type="button" class="btn-action-del" title="Delete" onclick="deleteAttendance(${row.id})">
+                    <i class="fas fa-trash-can"></i>
+                </button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function openAttendanceModal() {
+    document.getElementById('att_id').value = '';
+    document.getElementById('inp_pay_date').value = '';
+    document.getElementById('inp_employee').value = '';
+    document.getElementById('inp_daily').value = '';
+    document.getElementById('inp_absences').value = '0';
+    document.getElementById('inp_tardiness').value = '0';
+    document.getElementById('inp_undertime').value = '0';
+    document.getElementById('inp_overtime').value = '0';
+    document.getElementById('modalTitle').innerHTML = '<i class="fas fa-clock text-teal me-2"></i>ADD EMPLOYEE ATTENDANCE';
+    new bootstrap.Modal(document.getElementById('attendanceModal')).show();
+}
+
+function autoFetchDailyRate() {
+    const empSelect = document.getElementById('inp_employee');
+    const opt = empSelect.options[empSelect.selectedIndex];
+    const rate = opt ? opt.getAttribute('data-daily') : '';
+    if (rate) document.getElementById('inp_daily').value = rate;
+}
+
+function editAttendance(id) {
+    const data = allAttendance.find(x => x.id === id);
+    if (!data) return;
+    document.getElementById('att_id').value = data.id || '';
+    document.getElementById('inp_pay_date').value = data.pay_date || '';
+    document.getElementById('inp_employee').value = data.employee_number || '';
+    document.getElementById('inp_daily').value = data.daily || '0.00';
+    document.getElementById('inp_absences').value = data.absences || '0';
+    document.getElementById('inp_tardiness').value = data.tardiness || '0';
+    document.getElementById('inp_undertime').value = data.undertime || '0';
+    document.getElementById('inp_overtime').value = data.overtime || '0';
+    document.getElementById('modalTitle').innerHTML = '<i class="fas fa-pen-to-square text-teal me-2"></i>EDIT EMPLOYEE ATTENDANCE';
+    new bootstrap.Modal(document.getElementById('attendanceModal')).show();
+}
+
+document.getElementById('attendanceForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+        employee_number: document.getElementById('inp_employee').value,
+        pay_date: document.getElementById('inp_pay_date').value,
+        daily: parseFloat(document.getElementById('inp_daily').value) || 0,
+        absences: parseFloat(document.getElementById('inp_absences').value) || 0,
+        tardiness: parseFloat(document.getElementById('inp_tardiness').value) || 0,
+        undertime: parseFloat(document.getElementById('inp_undertime').value) || 0,
+        overtime: parseFloat(document.getElementById('inp_overtime').value) || 0
+    };
+    const id = document.getElementById('att_id').value;
+    const { error } = id
+        ? await db.from('attendance').update(payload).eq('id', id)
+        : await db.from('attendance').insert(payload);
+
+    if (error) return alert('Error: ' + error.message);
+    alert('Attendance Record Saved Successfully!');
+    bootstrap.Modal.getInstance(document.getElementById('attendanceModal')).hide();
+    loadData();
+});
+
+async function deleteAttendance(id) {
+    if (!confirm('Are you sure you want to delete this record?')) return;
+    await db.from('attendance').delete().eq('id', id);
+    loadData();
+}
+
+loadData();
+</script>
+</body>
+</html>

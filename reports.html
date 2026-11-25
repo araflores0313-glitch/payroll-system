@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Reports | LCC Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --secondary: #64748b;
+            --bg-body: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --radius-lg: 14px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+        }
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            letter-spacing: -0.01em;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .navbar-custom .navbar-brand {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--primary) !important;
+            letter-spacing: -0.5px;
+        }
+        .navbar-custom .nav-link {
+            color: var(--secondary) !important;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 8px 16px !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: var(--primary) !important;
+            background-color: var(--primary-light);
+        }
+        .header-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            border-radius: var(--radius-lg);
+            padding: 22px 28px;
+            color: white;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-card h4 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.35rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-card p {
+            margin: 4px 0 0 0;
+            font-size: 0.82rem;
+            opacity: 0.85;
+        }
+        .report-nav-tabs {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+        .report-nav-btn {
+            border: none;
+            background: transparent;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.82rem;
+            padding: 9px 18px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .report-nav-btn:hover {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+        .report-nav-btn.active {
+            background: var(--primary);
+            color: white !important;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+        }
+        .filter-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        .mgmt-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        .table-custom-main {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+        .table-custom-main thead th {
+            background-color: #f8fafc;
+            color: #334155;
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 14px;
+            border-bottom: 1.5px solid var(--border-color);
+            vertical-align: middle;
+        }
+        .table-custom-main tbody td {
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        .table-custom-main tbody tr:hover td {
+            background-color: #f8fafc;
+        }
+        .btn-tool {
+            background: #ffffff;
+            color: #334155;
+            border: 1px solid var(--border-color);
+            font-size: 0.82rem;
+            padding: 8px 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .btn-tool:hover {
+            background: #f8fafc;
+            color: var(--primary);
+            border-color: #cbd5e1;
+        }
+        @media print {
+            body { background: #ffffff !important; color: #000000 !important; font-size: 10pt; }
+            .navbar-custom, .report-nav-tabs, .filter-card, .btn-print-hide { display: none !important; }
+            .header-card {
+                background: none !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                border-bottom: 2px solid #000;
+                padding: 0 0 10px 0;
+                border-radius: 0;
+                margin-bottom: 15px;
+            }
+            .header-card p { color: #555 !important; }
+            .mgmt-card { border: none !important; box-shadow: none !important; }
+            .table-custom-main thead th { background: #eee !important; color: #000 !important; border: 1px solid #333 !important; }
+            .table-custom-main tbody td { border: 1px solid #333 !important; color: #000 !important; }
+            .badge { border: 1px solid #666 !important; background: transparent !important; color: #000 !important; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top mb-4">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+            <img src="profiles/logo.png" alt="LCC Logo" style="height: 38px; width: auto; border-radius: 6px;">
+            <span>LCC ADMIN</span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto ms-4 gap-1">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> DASHBOARD</a></li>
+                <li class="nav-item"><a class="nav-link" href="employee.html"><i class="fas fa-users me-1"></i> Employees</a></li>
+                <li class="nav-item"><a class="nav-link" href="dept.html"><i class="fas fa-sitemap me-1"></i> Dept & Position</a></li>
+                <li class="nav-item"><a class="nav-link" href="loans.html"><i class="fas fa-hand-holding-usd me-1"></i> Loans</a></li>
+                <li class="nav-item"><a class="nav-link" href="attendance.html"><i class="fas fa-user-clock me-1"></i> Attendance</a></li>
+                <li class="nav-item"><a class="nav-link" href="payroll.html"><i class="fas fa-file-invoice-dollar me-1"></i> Payroll</a></li>
+                <li class="nav-item"><a class="nav-link active text-primary" href="reports.html"><i class="fas fa-chart-line me-1"></i> Reports</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center text-muted small bg-light py-1 px-3 rounded-pill border">
+                    <span class="rounded-circle bg-success me-2" style="width: 8px; height: 8px;"></span>
+                    <span>Admin Session</span>
+                </div>
+                <button onclick="logoutAdmin()" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 fw-semibold">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 pb-5">
+    <div class="header-card">
+        <div>
+            <h4><i class="fas fa-chart-pie"></i> LCC PAYROLL & HR REPORTS CENTER</h4>
+            <p>Generate, review, and print official payroll computations, attendance sheets, and employee records.</p>
+        </div>
+        <div class="d-none d-md-block text-end btn-print-hide">
+            <button onclick="window.print()" class="btn btn-light text-primary fw-bold rounded-pill px-4 shadow-sm">
+                <i class="fas fa-print me-1"></i> PRINT REPORT
+            </button>
+        </div>
+    </div>
+
+    <div class="report-nav-tabs btn-print-hide">
+        <button class="report-nav-btn active" onclick="switchReport('payroll_summary', this)"><i class="fas fa-calculator"></i> Payroll & Net Pay Sheet</button>
+        <button class="report-nav-btn" onclick="switchReport('attendance', this)"><i class="fas fa-user-clock"></i> Attendance & DTR Summary</button>
+        <button class="report-nav-btn" onclick="switchReport('employee_masterlist', this)"><i class="fas fa-id-card"></i> Employee Masterlist</button>
+        <button class="report-nav-btn" onclick="switchReport('income_deductions', this)"><i class="fas fa-coins"></i> Other Income & Deductions</button>
+        <button class="report-nav-btn" onclick="switchReport('loans', this)"><i class="fas fa-hand-holding-dollar"></i> Employee Loans Ledger</button>
+        <button class="report-nav-btn" onclick="switchReport('dept_summary', this)"><i class="fas fa-sitemap"></i> Department Headcounts</button>
+    </div>
+
+    <div class="filter-card btn-print-hide">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <div id="payDateFilterBox" class="d-flex align-items-center gap-2">
+                <label class="small fw-bold text-muted text-nowrap"><i class="far fa-calendar-alt text-primary me-1"></i> PAY DATE:</label>
+                <select id="filterPayDate" class="form-select form-select-sm" onchange="renderReport()" style="min-width: 170px;"></select>
+            </div>
+            <div id="deptFilterBox" class="d-none align-items-center gap-2">
+                <label class="small fw-bold text-muted text-nowrap"><i class="fas fa-building text-primary me-1"></i> DEPARTMENT:</label>
+                <select id="filterDept" class="form-select form-select-sm" onchange="renderReport()" style="min-width: 170px;"></select>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn-tool"><i class="fas fa-print text-primary"></i> Print View</button>
+            <button onclick="exportTableToCSV('report_data.csv')" class="btn-tool"><i class="fas fa-file-excel text-success"></i> Export CSV</button>
+        </div>
+    </div>
+
+    <div class="mgmt-card">
+        <div class="p-4" id="reportContainer">
+            <p class="text-center text-muted py-4">Loading reports...</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="db.js"></script>
+<script>
+requireAuth();
+
+let currentReport = 'payroll_summary';
+let dbCache = {};
+
+async function initReports() {
+    const [
+        { data: periods },
+        { data: depts },
+        { data: positions },
+        { data: emps },
+        { data: empPos },
+        { data: atts },
+        { data: inc },
+        { data: ded },
+        { data: loans }
+    ] = await Promise.all([
+        db.from('payroll_periods').select('pay_date').order('pay_date', { ascending: false }),
+        db.from('departments').select('dept_name').order('dept_name', { ascending: true }),
+        db.from('positions').select('pos_name').order('pos_name', { ascending: true }),
+        db.from('employees').select('*').order('last_name', { ascending: true }),
+        db.from('employee_positions').select('*'),
+        db.from('attendance').select('*'),
+        db.from('other_income').select('*').order('id', { ascending: false }),
+        db.from('other_deductions').select('*').order('id', { ascending: false }),
+        db.from('employee_loans').select('*').order('loan_date', { ascending: false })
+    ]);
+
+    const empMap = {};
+    (emps || []).forEach(e => { empMap[e.employee_number] = e; });
+    const posMap = {};
+    (empPos || []).forEach(p => { posMap[p.employee_number] = p; });
+
+    dbCache = {
+        periods: periods || [],
+        depts: depts || [],
+        positions: positions || [],
+        emps: emps || [],
+        empPos: empPos || [],
+        atts: atts || [],
+        inc: inc || [],
+        ded: ded || [],
+        loans: loans || [],
+        empMap,
+        posMap
+    };
+
+    const filterPayDate = document.getElementById('filterPayDate');
+    const filterDept = document.getElementById('filterDept');
+
+    const uniqueDates = [...new Set(dbCache.periods.map(p => p.pay_date).filter(Boolean))];
+    filterPayDate.innerHTML = '<option value="">-- All Cutoffs --</option>' +
+        uniqueDates.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+    if (uniqueDates.length) filterPayDate.value = uniqueDates[0];
+
+    filterDept.innerHTML = '<option value="">-- All Departments --</option>' +
+        dbCache.depts.map(d => `<option value="${escapeHtml(d.dept_name)}">${escapeHtml(d.dept_name)}</option>`).join('');
+
+    renderReport();
+}
+
+function switchReport(type, btn) {
+    currentReport = type;
+    document.querySelectorAll('.report-nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const showDate = ['payroll_summary', 'attendance', 'income_deductions'].includes(type);
+    const showDept = (type === 'employee_masterlist');
+    document.getElementById('payDateFilterBox').className = showDate ? 'd-flex align-items-center gap-2' : 'd-none';
+    document.getElementById('deptFilterBox').className = showDept ? 'd-flex align-items-center gap-2' : 'd-none';
+    renderReport();
+}
+
+function fmt(num) {
+    return Number(num || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function renderReport() {
+    const pDate = document.getElementById('filterPayDate').value;
+    const fDept = document.getElementById('filterDept').value;
+    const c = document.getElementById('reportContainer');
+    const { empMap, posMap } = dbCache;
+
+    if (currentReport === 'payroll_summary') {
+        const rows = dbCache.atts
+            .filter(a => !pDate || a.pay_date === pDate)
+            .sort((a, b) => ((empMap[a.employee_number]?.last_name) || '').localeCompare((empMap[b.employee_number]?.last_name) || ''));
+
+        let grandNet = 0;
+        const bodyHtml = rows.length ? rows.map(row => {
+            const e = empMap[row.employee_number] || {};
+            const p = posMap[row.employee_number] || {};
+            const otherInc = dbCache.inc
+                .filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date)
+                .reduce((s, x) => s + Number(x.amount || 0), 0);
+            const otherDed = dbCache.ded
+                .filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date)
+                .reduce((s, x) => s + Number(x.amount || 0), 0);
+
+            const dailyRate = Number(row.daily) > 0 ? Number(row.daily) : Number(p.daily || 0);
+            const hourlyRate = dailyRate / 8;
+            const daysWorked = Math.max(0, 13 - Number(row.absences || 0));
+            const basicPay = daysWorked * dailyRate;
+            const otPay = Number(row.overtime || 0) * (hourlyRate * 1.25);
+            const tardyDed = (Number(row.tardiness || 0) + Number(row.undertime || 0)) * hourlyRate;
+            const netPay = (basicPay + otPay + otherInc) - (tardyDed + otherDed);
+            grandNet += netPay;
+
+            return `<tr>
+                <td class="fw-bold text-primary">${escapeHtml(row.employee_number)}</td>
+                <td class="fw-semibold">${escapeHtml(e.last_name || '')}, ${escapeHtml(e.first_name || '')}</td>
+                <td>${escapeHtml(p.position || 'N/A')}</td>
+                <td class="text-end">₱${fmt(dailyRate)}</td>
+                <td class="text-end">₱${fmt(basicPay)}</td>
+                <td class="text-end text-success">+₱${fmt(otPay)}</td>
+                <td class="text-end text-success">+₱${fmt(otherInc)}</td>
+                <td class="text-end text-danger">-₱${fmt(tardyDed)}</td>
+                <td class="text-end text-danger">-₱${fmt(otherDed)}</td>
+                <td class="text-end fw-bold text-primary" style="font-size: 0.95rem;">₱${fmt(netPay)}</td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="10" class="text-center py-4 text-muted">No payroll/attendance records found for this period.</td></tr>`;
+
+        const footHtml = grandNet > 0
+            ? `<tfoot><tr class="table-light fw-bold"><td colspan="9" class="text-end">TOTAL PAYROLL DISBURSEMENT:</td><td class="text-end text-primary" style="font-size: 1.05rem;">₱${fmt(grandNet)}</td></tr></tfoot>`
+            : '';
+
+        c.innerHTML = `
+            <div class="text-center mb-4">
+                <h5 class="fw-bold mb-1 text-dark">OFFICIAL PAYROLL COMPUTATION SHEET</h5>
+                <span class="badge bg-light text-primary border px-3 py-1.5 fw-semibold">PAY DATE: ${pDate ? escapeHtml(pDate) : 'All Cutoff Dates'}</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table-custom-main align-middle" id="reportTable">
+                    <thead>
+                        <tr>
+                            <th>Emp ID</th><th>Employee Name</th><th>Position</th>
+                            <th class="text-end">Daily Rate</th><th class="text-end">Basic Pay</th>
+                            <th class="text-end">Overtime</th><th class="text-end">Other Income</th>
+                            <th class="text-end text-danger">Tardiness/Abs</th><th class="text-end text-danger">Other Ded</th>
+                            <th class="text-end text-primary fw-bold">Net Pay</th>
+                        </tr>
+                    </thead>
+                    <tbody>${bodyHtml}</tbody>
+                    ${footHtml}
+                </table>
+            </div>`;
+    }
+    else if (currentReport === 'attendance') {
+        const rows = dbCache.atts.filter(a => !pDate || a.pay_date === pDate);
+        const bodyHtml = rows.length ? rows.map(r => {
+            const e = empMap[r.employee_number] || {};
+            return `<tr>
+                <td style="text-align: left;" class="fw-semibold">${escapeHtml(e.last_name || '')}, ${escapeHtml(e.first_name || '')}</td>
+                <td class="text-primary fw-bold">${escapeHtml(r.employee_number)}</td>
+                <td>${escapeHtml(r.pay_date)}</td>
+                <td>₱${fmt(r.daily)}</td>
+                <td><span class="${r.absences > 0 ? 'text-danger fw-bold' : ''}">${escapeHtml(r.absences)}</span></td>
+                <td>${escapeHtml(r.tardiness)}</td>
+                <td>${escapeHtml(r.undertime)}</td>
+                <td><span class="${r.overtime > 0 ? 'text-primary fw-bold' : ''}">${escapeHtml(r.overtime)}</span></td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="8" class="text-muted py-4">No attendance records found.</td></tr>`;
+
+        c.innerHTML = `
+            <div class="text-center mb-4">
+                <h5 class="fw-bold mb-1 text-dark">OFFICIAL ATTENDANCE & TIME RECORD SUMMARY</h5>
+                <span class="badge bg-light text-teal border px-3 py-1.5 fw-semibold">PAY DATE: ${pDate ? escapeHtml(pDate) : 'All Dates'}</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table-custom-main text-center" id="reportTable">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Employee Name</th><th>Emp ID</th><th>Pay Date</th>
+                            <th>Daily Rate</th><th>Absences</th><th>Tardiness</th><th>Under Time</th><th>Over Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>${bodyHtml}</tbody>
+                </table>
+            </div>`;
+    }
+    else if (currentReport === 'employee_masterlist') {
+        const rows = dbCache.emps.filter(e => !fDept || (posMap[e.employee_number]?.department === fDept));
+        const bodyHtml = rows.length ? rows.map(r => {
+            const p = posMap[r.employee_number] || {};
+            return `<tr>
+                <td class="fw-bold text-primary">${escapeHtml(r.employee_number)}</td>
+                <td class="fw-semibold">${escapeHtml(r.last_name)}, ${escapeHtml(r.first_name)} ${escapeHtml(r.middle_name)}</td>
+                <td><span class="badge bg-light text-primary border">${escapeHtml(p.department || 'Unassigned')}</span></td>
+                <td>${escapeHtml(p.position || 'N/A')}</td>
+                <td>${escapeHtml(r.contact_no)}</td>
+                <td>${escapeHtml(r.email)}</td>
+                <td>${escapeHtml(r.sss_no)}</td>
+                <td>${escapeHtml(r.philhealth_no)}</td>
+                <td>${escapeHtml(r.tin_no)}</td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="9" class="text-center py-4 text-muted">No employees registered under this department.</td></tr>`;
+
+        c.innerHTML = `
+            <div class="text-center mb-4">
+                <h5 class="fw-bold mb-1 text-dark">EMPLOYEE MASTERLIST & CREDENTIALS DIRECTORY</h5>
+                <span class="badge bg-light text-primary border px-3 py-1.5 fw-semibold">${fDept ? 'Department: ' + escapeHtml(fDept) : 'All Active Departments'}</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table-custom-main align-middle" id="reportTable">
+                    <thead>
+                        <tr>
+                            <th>Emp ID</th><th>Full Name</th><th>Department</th><th>Position</th>
+                            <th>Contact No</th><th>Email</th><th>SSS No</th><th>PhilHealth</th><th>TIN No</th>
+                        </tr>
+                    </thead>
+                    <tbody>${bodyHtml}</tbody>
+                </table>
+            </div>`;
+    }
+    else if (currentReport === 'income_deductions') {
+        const incs = dbCache.inc.filter(x => !pDate || x.pay_date === pDate);
+        const deds = dbCache.ded.filter(x => !pDate || x.pay_date === pDate);
+        c.innerHTML = `
+            <div class="text-center mb-4">
+                <h5 class="fw-bold mb-1 text-dark">OTHER INCOME & DEDUCTIONS LEDGER</h5>
+                <span class="badge bg-light text-primary border px-3 py-1.5 fw-semibold">Pay Date: ${pDate ? escapeHtml(pDate) : 'All Cutoff Schedules'}</span>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="border rounded-3 p-3 bg-light">
+                        <h6 class="fw-bold text-success mb-3"><i class="fas fa-hand-holding-dollar me-2"></i>Recorded Other Income</h6>
+                        <table class="table-custom-main">
+                            <thead><tr><th>Emp ID</th><th>Pay Date</th><th>Income Type</th><th class="text-end">Amount</th></tr></thead>
+                            <tbody>${incs.length ? incs.map(ri => `<tr><td class="fw-bold text-primary">${escapeHtml(ri.employee_number)}</td><td>${escapeHtml(ri.pay_date)}</td><td>${escapeHtml(ri.income_type)}</td><td class="text-end fw-bold text-success">₱${fmt(ri.amount)}</td></tr>`).join('') : '<tr><td colspan="4" class="text-center text-muted py-3">No records</td></tr>'}</tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="border rounded-3 p-3 bg-light">
+                        <h6 class="fw-bold text-danger mb-3"><i class="fas fa-file-invoice-dollar me-2"></i>Recorded Other Deductions</h6>
+                        <table class="table-custom-main">
+                            <thead><tr><th>Emp ID</th><th>Pay Date</th><th>Deduction Type</th><th class="text-end">Amount</th></tr></thead>
+                            <tbody>${deds.length ? deds.map(rd => `<tr><td class="fw-bold text-primary">${escapeHtml(rd.employee_number)}</td><td>${escapeHtml(rd.pay_date)}</td><td>${escapeHtml(rd.deduction_type)}</td><td class="text-end fw-bold text-danger">-₱${fmt(rd.amount)}</td></tr>`).join('') : '<tr><td colspan="4" class="text-center text-muted py-3">No records</td></tr>'}</tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>`;
+    }
+    else if (currentReport === 'loans') {
+        const bodyHtml = dbCache.loans.length ? dbCache.loans.map(r => {
+            const e = empMap[r.employee_number] || {};
+            return `<tr>
+                <td class="fw-bold text-primary">${escapeHtml(r.employee_number)}</td>
+                <td style="text-align: left;" class="fw-semibold">${escapeHtml(e.last_name || '')}, ${escapeHtml(e.first_name || '')}</td>
+                <td>${escapeHtml(r.loan_date)}</td>
+                <td><span class="badge bg-light text-dark border px-3 py-1.5">${escapeHtml(r.loan_type)}</span></td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="4" class="text-center py-4 text-muted">No employee loan records found.</td></tr>`;
+
+        c.innerHTML = `
+            <div class="text-center mb-4">
+                <h5 class="fw-bold mb-1 text-dark">EMPLOYEE ACTIVE LOANS & FINANCING SUMMARY</h5>
+                <span class="badge bg-light text-primary border px-3 py-1.5 fw-semibold">Master Loan Records</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table-custom-main align-middle text-center" id="reportTable">
+                    <thead><tr><th>Emp ID</th><th style="text-align: left;">Employee Name</th><th>Loan Application Date</th><th>Type of Loan</th></tr></thead>
+                    <tbody>${bodyHtml}</tbody>
+                </table>
+            </div>`;
+    }
+    else if (currentReport === 'dept_summary') {
+        const deptRows = dbCache.depts.map(d => ({
+            name: d.dept_name,
+            count: dbCache.empPos.filter(p => p.department === d.dept_name).length
+        })).sort((a, b) => b.count - a.count);
+
+        const posRows = dbCache.positions.map(pos => ({
+            name: pos.pos_name,
+            count: dbCache.empPos.filter(p => p.position === pos.pos_name).length
+        }));
+
+        c.innerHTML = `
+            <div class="text-center mb-4">
+                <h5 class="fw-bold mb-1 text-dark">DEPARTMENT & POSITIONS HEADCOUNT BREAKDOWN</h5>
+                <span class="badge bg-light text-primary border px-3 py-1.5 fw-semibold">Institutional Directory</span>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="border rounded-3 p-3">
+                        <h6 class="fw-bold text-primary mb-3"><i class="fas fa-building me-2"></i>Employees per Department</h6>
+                        <table class="table-custom-main">
+                            <thead><tr><th>Department</th><th class="text-end">Headcount</th></tr></thead>
+                            <tbody>${deptRows.map(d => `<tr><td class="fw-semibold">${escapeHtml(d.name)}</td><td class="text-end fw-bold text-primary">${d.count} employee(s)</td></tr>`).join('')}</tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="border rounded-3 p-3">
+                        <h6 class="fw-bold text-teal mb-3"><i class="fas fa-id-badge me-2"></i>Available Positions List</h6>
+                        <table class="table-custom-main">
+                            <thead><tr><th>Position Title</th><th class="text-end">Occupied By</th></tr></thead>
+                            <tbody>${posRows.map(p => `<tr><td class="fw-semibold">${escapeHtml(p.name)}</td><td class="text-end fw-bold text-success">${p.count} person(s)</td></tr>`).join('')}</tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>`;
+    }
+}
+
+function exportTableToCSV(filename) {
+    let csv = [];
+    let rows = document.querySelectorAll("#reportTable tr");
+    if (!rows.length) {
+        alert("No table data available to export.");
+        return;
+    }
+    for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll("td, th");
+        for (let j = 0; j < cols.length; j++) {
+            let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, "").replace(/(\s\s+)/g, ' ').replace(/"/g, '""');
+            row.push('"' + data + '"');
+        }
+        csv.push(row.join(","));
+    }
+    let csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+    let link = document.createElement("a");
+    link.download = filename;
+    link.href = window.URL.createObjectURL(csvFile);
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+}
+
+initReports();
+</script>
+</body>
+</html>

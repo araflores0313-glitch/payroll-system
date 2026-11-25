@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System | LCC Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --secondary: #64748b;
+            --bg-body: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --radius-lg: 14px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+        }
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            letter-spacing: -0.01em;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .navbar-custom .navbar-brand {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--primary) !important;
+            letter-spacing: -0.5px;
+        }
+        .navbar-custom .nav-link {
+            color: var(--secondary) !important;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 8px 16px !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: var(--primary) !important;
+            background-color: var(--primary-light);
+        }
+        .header-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            border-radius: var(--radius-lg);
+            padding: 22px 28px;
+            color: white;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-card h4 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.35rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-card p {
+            margin: 4px 0 0 0;
+            font-size: 0.82rem;
+            opacity: 0.85;
+        }
+        .toolbar {
+            background: #ffffff;
+            padding: 12px 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 22px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 10px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+        .btn-tool {
+            background: #ffffff;
+            color: #334155;
+            border: 1px solid var(--border-color);
+            font-size: 0.82rem;
+            padding: 8px 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .btn-tool:hover {
+            background: #f8fafc;
+            color: var(--primary);
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        .nav-tabs {
+            border-bottom: none;
+            gap: 6px;
+            padding: 0 4px;
+        }
+        .nav-tabs .nav-link {
+            color: #64748b;
+            background: #e2e8f0;
+            border: 1px solid transparent;
+            border-radius: 10px 10px 0 0;
+            padding: 10px 22px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            transition: all 0.2s ease;
+        }
+        .nav-tabs .nav-link:hover {
+            color: var(--primary);
+            background: #edf2f7;
+        }
+        .nav-tabs .nav-link.active {
+            background: #ffffff !important;
+            color: var(--primary) !important;
+            border: 1px solid var(--border-color);
+            border-bottom: 2px solid #ffffff !important;
+            position: relative;
+            top: 1px;
+        }
+        .tab-content {
+            background: #ffffff;
+            padding: 32px 30px;
+            border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+            min-height: 480px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .form-control, .form-select {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 9px 13px;
+            font-size: 0.88rem;
+            color: #1e293b;
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12);
+            outline: none;
+        }
+        .profile-photo-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        #preview_img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 3px solid #f1f5f9;
+            box-shadow: var(--shadow-md);
+        }
+        .data-table {
+            width: 100%;
+            margin-top: 16px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .data-table th {
+            background: #f1f5f9;
+            color: #334155;
+            padding: 12px 16px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .data-table td {
+            background: #ffffff;
+            color: #475569;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 42px;
+        }
+        .btn-add:hover {
+            background: var(--primary-dark);
+        }
+        .modal-content {
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                padding: 25px;
+            }
+            .modal-header, .modal-footer, .btn-close { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+            <img src="profiles/logo.png" alt="LCC Logo" style="height: 38px; width: auto; border-radius: 6px;">
+            <span>LCC ADMIN</span>
+        </a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto ms-4 gap-1">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> DASHBOARD</a></li>
+                <li class="nav-item"><a class="nav-link active text-primary" href="employee.html"><i class="fas fa-users me-1"></i> EMPLOYEES</a></li>
+                <li class="nav-item"><a class="nav-link" href="dept.html"><i class="fas fa-sitemap me-1"></i> DEP_POS</a></li>
+                <li class="nav-item"><a class="nav-link" href="loans.html"><i class="fas fa-hand-holding-usd me-1"></i> LOANS</a></li>
+                <li class="nav-item"><a class="nav-link" href="attendance.html"><i class="fas fa-user-clock me-1"></i> ATTENDANCE</a></li>
+                <li class="nav-item"><a class="nav-link" href="payroll.html"><i class="fas fa-file-invoice-dollar me-1"></i> PAYROLL</a></li>
+                <li class="nav-item"><a class="nav-link" href="reports.html"><i class="fas fa-chart-line me-1"></i> REPORTS</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center text-muted small bg-light py-1 px-3 rounded-pill border">
+                    <span class="rounded-circle bg-success me-2" style="width: 8px; height: 8px;"></span>
+                    <span>Admin Session</span>
+                </div>
+                <button onclick="logoutAdmin()" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 fw-semibold">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid mt-4 px-4 pb-5">
+    <div class="header-card">
+        <div>
+            <h4><i class="fas fa-user-gear"></i> Employee Information Management</h4>
+            <p>Maintain, update, and review masterlist employee credentials and assignments.</p>
+        </div>
+        <div class="d-none d-md-block text-end">
+            <span class="badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
+                <i class="far fa-calendar-alt me-1"></i> Active Record View
+            </span>
+        </div>
+    </div>
+
+    <form id="employeeForm">
+        <input type="hidden" id="inp_current_photo" value="">
+        <div class="toolbar">
+            <button type="button" class="btn-tool" onclick="resetEmployeeForm()"><i class="fas fa-plus-circle text-primary"></i> NEW</button>
+            <button type="submit" id="btnSaveEmp" class="btn-tool"><i class="fas fa-check-circle text-success"></i> SAVE</button>
+            <button type="button" class="btn-tool" onclick="resetEmployeeForm()"><i class="fas fa-undo-alt text-warning"></i> CANCEL</button>
+            <button type="button" class="btn-tool" onclick="openViewModal()"><i class="fas fa-print text-info"></i> PRINT</button>
+            <button type="button" class="btn-tool" onclick="openViewModal()"><i class="fas fa-table-list text-secondary"></i> VIEW</button>
+        </div>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#personal"><i class="fas fa-id-card me-1"></i> PERSONAL INFO</button></li>
+            <li class="nav-item"><button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#emergency"><i class="fas fa-phone-volume me-1"></i> EMERGENCY</button></li>
+            <li class="nav-item"><button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#dependent"><i class="fas fa-users-rectangle me-1"></i> DEPENDENTS</button></li>
+            <li class="nav-item"><button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#education"><i class="fas fa-graduation-cap me-1"></i> EDUCATION</button></li>
+            <li class="nav-item"><button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#reference"><i class="fas fa-user-check me-1"></i> REFERENCES</button></li>
+            <li class="nav-item"><button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#position"><i class="fas fa-briefcase me-1"></i> POSITION</button></li>
+        </ul>
+
+        <div class="tab-content shadow-sm">
+            <!-- PERSONAL -->
+            <div class="tab-pane fade show active" id="personal">
+                <div class="row g-3">
+                    <div class="col-md-2 text-center border-end pe-3">
+                        <div class="profile-photo-wrapper">
+                            <img id="preview_img" src="profiles/logo.png" onerror="this.src='profiles/logo.png'" alt="Profile Picture">
+                        </div>
+                        <input type="file" id="profile_picture" class="form-control form-control-sm" accept="image/*">
+                        <small class="text-muted d-block mt-2">Recommended: Square format</small>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row g-3">
+                            <div class="col-md-4"><label class="form-label">Employee Number</label><input type="text" id="inp_emp_no" class="form-control" placeholder="e.g. 24-001" required></div>
+                            <div class="col-md-4"><label class="form-label">Portal Password</label><input type="password" id="inp_password" class="form-control" placeholder="••••••••"></div>
+                            <div class="col-md-4"><label class="form-label">Gender</label><select id="inp_gender" class="form-select"><option>Male</option><option>Female</option></select></div>
+                            <div class="col-md-4"><label class="form-label">Last Name</label><input type="text" id="inp_last_name" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">First Name</label><input type="text" id="inp_first_name" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">Middle Name</label><input type="text" id="inp_middle_name" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">Email</label><input type="email" id="inp_email" class="form-control" placeholder="example@lcc.edu.ph"></div>
+                            <div class="col-md-4"><label class="form-label">Contact No</label><input type="text" id="inp_contact_no" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">Birth Date</label><input type="date" id="inp_birth_date" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">Civil Status</label><input type="text" id="inp_civil_status" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">Nationality</label><input type="text" id="inp_nationality" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">Religion</label><input type="text" id="inp_religion" class="form-control"></div>
+                            <div class="col-md-6"><label class="form-label">Permanent Address</label><input type="text" id="inp_perm_address" class="form-control"></div>
+                            <div class="col-md-6"><label class="form-label">Present Address</label><input type="text" id="inp_pres_address" class="form-control"></div>
+                            <div class="col-md-3"><label class="form-label">SSS No</label><input type="text" id="inp_sss_no" class="form-control"></div>
+                            <div class="col-md-3"><label class="form-label">PhilHealth</label><input type="text" id="inp_philhealth_no" class="form-control"></div>
+                            <div class="col-md-2"><label class="form-label">Pag-Ibig</label><input type="text" id="inp_pagibig_no" class="form-control"></div>
+                            <div class="col-md-2"><label class="form-label">TIN No</label><input type="text" id="inp_tin_no" class="form-control"></div>
+                            <div class="col-md-2"><label class="form-label">ATM No</label><input type="text" id="inp_atm_no" class="form-control"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMERGENCY -->
+            <div class="tab-pane fade" id="emergency">
+                <div class="p-2 mb-3 bg-light rounded-3 border ps-3">
+                    <span class="text-secondary fw-semibold small"><i class="fas fa-info-circle text-primary me-1"></i> Designated primary contact in case of emergency</span>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4"><label class="form-label">Contact Person Name</label><input type="text" id="inp_emg_name" class="form-control"></div>
+                    <div class="col-md-3"><label class="form-label">Relationship</label><input type="text" id="inp_emg_rel" class="form-control"></div>
+                    <div class="col-md-5"><label class="form-label">Address</label><input type="text" id="inp_emg_addr" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Contact No</label><input type="text" id="inp_emg_con" class="form-control"></div>
+                </div>
+            </div>
+
+            <!-- DEPENDENTS -->
+            <div class="tab-pane fade" id="dependent">
+                <div class="bg-light p-3 rounded-3 border mb-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4"><label class="form-label">Dependent Name</label><input type="text" id="d_name" class="form-control" placeholder="Full name"></div>
+                        <div class="col-md-3"><label class="form-label">Birth Date</label><input type="date" id="d_bdate" class="form-control"></div>
+                        <div class="col-md-3"><label class="form-label">Relationship</label><input type="text" id="d_rel" class="form-control" placeholder="e.g. Child / Spouse"></div>
+                        <div class="col-md-2"><button type="button" class="btn-add w-100" onclick="addRow('dependent')"><i class="fas fa-plus"></i> ADD ROW</button></div>
+                    </div>
+                </div>
+                <table class="data-table" id="tbl_dependent">
+                    <thead><tr><th width="40%">Name</th><th width="30%">Birth Date</th><th width="30%">Relationship</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- EDUCATION -->
+            <div class="tab-pane fade" id="education">
+                <div class="bg-light p-3 rounded-3 border mb-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4"><label class="form-label">School Name</label><input type="text" id="e_school" class="form-control" placeholder="School Name"></div>
+                        <div class="col-md-4"><label class="form-label">School Year</label><input type="text" id="e_sy" class="form-control" placeholder="e.g. 2018-2022"></div>
+                        <div class="col-md-4"><label class="form-label">Education Level</label><select id="e_level" class="form-select"><option>Primary</option><option>Secondary</option><option>Tertiary</option><option>Post-Grad</option></select></div>
+                        <div class="col-md-10"><label class="form-label">School Address</label><input type="text" id="e_addr" class="form-control" placeholder="Complete School Address"></div>
+                        <div class="col-md-2"><button type="button" class="btn-add w-100" onclick="addRow('education')"><i class="fas fa-plus"></i> ADD ROW</button></div>
+                    </div>
+                </div>
+                <table class="data-table" id="tbl_education">
+                    <thead><tr><th width="30%">School</th><th width="40%">Address</th><th width="15%">S.Y.</th><th width="15%">Level</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- REFERENCES -->
+            <div class="tab-pane fade" id="reference">
+                <div class="bg-light p-3 rounded-3 border mb-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4"><label class="form-label">Full Name</label><input type="text" id="r_name" class="form-control" placeholder="Reference Person Name"></div>
+                        <div class="col-md-4"><label class="form-label">Occupation</label><input type="text" id="r_occ" class="form-control" placeholder="Occupation / Position"></div>
+                        <div class="col-md-4"><label class="form-label">Contact No</label><input type="text" id="r_con" class="form-control" placeholder="Mobile / Tel No."></div>
+                        <div class="col-md-10"><label class="form-label">Address</label><input type="text" id="r_addr" class="form-control" placeholder="Complete Address of Reference"></div>
+                        <div class="col-md-2"><button type="button" class="btn-add w-100" onclick="addRow('reference')"><i class="fas fa-plus"></i> ADD ROW</button></div>
+                    </div>
+                </div>
+                <table class="data-table" id="tbl_reference">
+                    <thead><tr><th width="25%">Name</th><th width="20%">Occupation</th><th width="35%">Address</th><th width="20%">Contact</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- POSITION -->
+            <div class="tab-pane fade" id="position">
+                <div class="bg-light p-3 rounded-3 border mb-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3"><label class="form-label">Department</label><select id="p_dept" class="form-select"><option value="">-- Select Department --</option></select></div>
+                        <div class="col-md-3"><label class="form-label">Position</label><select id="p_pos" class="form-select"><option value="">-- Select Position --</option></select></div>
+                        <div class="col-md-2"><label class="form-label">Start Date</label><input type="date" id="p_start_date" class="form-control"></div>
+                        <div class="col-md-2"><label class="form-label">End Date</label><input type="date" id="p_end_date" class="form-control"></div>
+                        <div class="col-md-2"><button type="button" class="btn-add w-100" onclick="addRow('position')"><i class="fas fa-check"></i> SET POSITION</button></div>
+                        <div class="col-md-4 mt-2"><label class="form-label">Monthly Rate (₱)</label><input type="number" step="0.01" id="p_monthly" class="form-control" oninput="calculateRates('monthly')"></div>
+                        <div class="col-md-4 mt-2"><label class="form-label">Daily Rate (₱)</label><input type="number" step="0.01" id="p_daily" class="form-control" oninput="calculateRates('daily')"></div>
+                        <div class="col-md-4 mt-2"><label class="form-label">Hourly Rate (₱)</label><input type="number" step="0.01" id="p_hourly" class="form-control" oninput="calculateRates('hourly')"></div>
+                    </div>
+                </div>
+                <table class="data-table" id="tbl_position">
+                    <thead><tr><th width="25%">Dept</th><th width="25%">Position</th><th width="25%">Duration</th><th width="25%">Rates Computation</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- VIEW MODAL -->
+<div class="modal fade" id="viewModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold"><i class="fas fa-database me-2"></i>Master List Records</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle">
+                        <thead class="table-light text-primary">
+                            <tr><th>Emp ID</th><th>Full Name</th><th>Department</th><th>Position</th><th class="text-center" width="230">Action</th></tr>
+                        </thead>
+                        <tbody id="masterListBody"><tr><td colspan="5" class="text-center py-3">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PRINT MODAL -->
+<div class="modal fade" id="printModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-semibold"><i class="fas fa-file-invoice me-2"></i>Employee Document Preview</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 p-md-5" id="printArea"><div id="printBody"></div></div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-primary px-4" onclick="window.print()"><i class="fas fa-print me-2"></i>PRINT DOCUMENT</button>
+                <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="db.js"></script>
+<script>
+requireAuth();
+
+let pendingPhotoDataUrl = null;
+
+document.getElementById('profile_picture').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const maxDim = 250;
+            let w = img.width, h = img.height;
+            if (w > h) { if (w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; } }
+            else { if (h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; } }
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            pendingPhotoDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            document.getElementById('preview_img').src = pendingPhotoDataUrl;
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+function calculateRates(source) {
+    let m = document.getElementById('p_monthly');
+    let d = document.getElementById('p_daily');
+    let h = document.getElementById('p_hourly');
+
+    if (source === 'monthly') {
+        let val = parseFloat(m.value) || 0;
+        d.value = (val / 26).toFixed(2);
+        h.value = ((val / 26) / 8).toFixed(2);
+    } else if (source === 'daily') {
+        let val = parseFloat(d.value) || 0;
+        m.value = (val * 26).toFixed(2);
+        h.value = (val / 8).toFixed(2);
+    } else if (source === 'hourly') {
+        let val = parseFloat(h.value) || 0;
+        d.value = (val * 8).toFixed(2);
+        m.value = ((val * 8) * 26).toFixed(2);
+    }
+}
+
+function addRow(type) {
+    if (type === 'dependent') {
+        let n = d_name.value.trim(), b = d_bdate.value, r = d_rel.value.trim();
+        if (!n) return;
+        tbl_dependent.querySelector('tbody').insertAdjacentHTML('beforeend',
+            `<tr><td>${escapeHtml(n)}<input type="hidden" class="dep_name" value="${escapeHtml(n)}"></td>
+             <td>${escapeHtml(b)}<input type="hidden" class="dep_bdate" value="${escapeHtml(b)}"></td>
+             <td>${escapeHtml(r)}<input type="hidden" class="dep_rel" value="${escapeHtml(r)}"></td></tr>`);
+        d_name.value = ''; d_bdate.value = ''; d_rel.value = '';
+    } else if (type === 'education') {
+        let s = e_school.value.trim(), a = e_addr.value.trim(), y = e_sy.value.trim(), l = e_level.value;
+        if (!s) return;
+        tbl_education.querySelector('tbody').insertAdjacentHTML('beforeend',
+            `<tr><td>${escapeHtml(s)}<input type="hidden" class="edu_school" value="${escapeHtml(s)}"></td>
+             <td>${escapeHtml(a)}<input type="hidden" class="edu_addr" value="${escapeHtml(a)}"></td>
+             <td>${escapeHtml(y)}<input type="hidden" class="edu_sy" value="${escapeHtml(y)}"></td>
+             <td>${escapeHtml(l)}<input type="hidden" class="edu_level" value="${escapeHtml(l)}"></td></tr>`);
+        e_school.value = ''; e_addr.value = ''; e_sy.value = '';
+    } else if (type === 'reference') {
+        let n = r_name.value.trim(), o = r_occ.value.trim(), a = r_addr.value.trim(), c = r_con.value.trim();
+        if (!n) { alert('Please enter reference name.'); return; }
+        tbl_reference.querySelector('tbody').insertAdjacentHTML('beforeend',
+            `<tr><td>${escapeHtml(n)}<input type="hidden" class="ref_name" value="${escapeHtml(n)}"></td>
+             <td>${escapeHtml(o)}<input type="hidden" class="ref_occ" value="${escapeHtml(o)}"></td>
+             <td>${escapeHtml(a)}<input type="hidden" class="ref_addr" value="${escapeHtml(a)}"></td>
+             <td>${escapeHtml(c)}<input type="hidden" class="ref_con" value="${escapeHtml(c)}"></td></tr>`);
+        r_name.value = ''; r_occ.value = ''; r_addr.value = ''; r_con.value = '';
+    } else if (type === 'position') {
+        let d = p_dept.value, p = p_pos.value, sd = p_start_date.value, ed = p_end_date.value;
+        let m = p_monthly.value || 0, dy = p_daily.value || 0, h = p_hourly.value || 0;
+        if (!d || !p) return;
+        tbl_position.querySelector('tbody').innerHTML =
+            `<tr><td>${escapeHtml(d)}<input type="hidden" id="hid_dept" value="${escapeHtml(d)}"></td>
+             <td>${escapeHtml(p)}<input type="hidden" id="hid_pos" value="${escapeHtml(p)}"></td>
+             <td>${escapeHtml(sd)} - ${escapeHtml(ed)}<input type="hidden" id="hid_start" value="${escapeHtml(sd)}"><input type="hidden" id="hid_end" value="${escapeHtml(ed)}"></td>
+             <td>M: ₱${m} | D: ₱${dy} | H: ₱${h}<input type="hidden" id="hid_monthly" value="${m}"><input type="hidden" id="hid_daily" value="${dy}"><input type="hidden" id="hid_hourly" value="${h}"></td></tr>`;
+    }
+}
+
+function resetEmployeeForm() {
+    document.getElementById('employeeForm').reset();
+    document.getElementById('inp_current_photo').value = '';
+    pendingPhotoDataUrl = null;
+    document.getElementById('preview_img').src = 'profiles/logo.png';
+    tbl_dependent.querySelector('tbody').innerHTML = '';
+    tbl_education.querySelector('tbody').innerHTML = '';
+    tbl_reference.querySelector('tbody').innerHTML = '';
+    tbl_position.querySelector('tbody').innerHTML = '';
+}
+
+async function loadDeptAndPosDropdowns() {
+    const [{ data: depts }, { data: poses }] = await Promise.all([
+        db.from('departments').select('dept_name').order('dept_name', { ascending: true }),
+        db.from('positions').select('pos_name').order('pos_name', { ascending: true })
+    ]);
+    p_dept.innerHTML = '<option value="">-- Select Department --</option>' +
+        (depts || []).map(d => `<option value="${escapeHtml(d.dept_name)}">${escapeHtml(d.dept_name)}</option>`).join('');
+    p_pos.innerHTML = '<option value="">-- Select Position --</option>' +
+        (poses || []).map(p => `<option value="${escapeHtml(p.pos_name)}">${escapeHtml(p.pos_name)}</option>`).join('');
+}
+
+async function openViewModal() {
+    new bootstrap.Modal(document.getElementById('viewModal')).show();
+    const tbody = document.getElementById('masterListBody');
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3">Loading...</td></tr>';
+
+    const [{ data: emps, error }, { data: posList }] = await Promise.all([
+        db.from('employees').select('*').order('last_name', { ascending: true }),
+        db.from('employee_positions').select('*')
+    ]);
+    if (error) { tbody.innerHTML = `<tr><td colspan="5" class="text-danger">${escapeHtml(error.message)}</td></tr>`; return; }
+
+    const posMap = {};
+    (posList || []).forEach(p => { posMap[p.employee_number] = p; });
+
+    if (!emps.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No employee records found.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = emps.map(r => {
+        const p = posMap[r.employee_number] || {};
+        return `<tr>
+            <td class="fw-bold text-dark">${escapeHtml(r.employee_number)}</td>
+            <td class="fw-semibold">${escapeHtml(r.last_name)}, ${escapeHtml(r.first_name)}</td>
+            <td><span class="badge bg-light text-primary border">${escapeHtml(p.department || '')}</span></td>
+            <td>${escapeHtml(p.position || '')}</td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="fetchForPrint('${escapeHtml(r.employee_number)}')"><i class="fas fa-eye me-1"></i> View</button>
+                <button class="btn btn-sm btn-outline-success me-1" onclick="loadEmployeeToForm('${escapeHtml(r.employee_number)}')"><i class="fas fa-pen-to-square me-1"></i> Edit</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteEmployeeFromTable('${escapeHtml(r.employee_number)}')"><i class="fas fa-trash me-1"></i></button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+async function getEmployeeDetails(empId) {
+    const [
+        { data: empArr },
+        { data: emgArr },
+        { data: deps },
+        { data: edus },
+        { data: refs },
+        { data: posArr }
+    ] = await Promise.all([
+        db.from('employees').select('*').eq('employee_number', empId).limit(1),
+        db.from('emergency_contacts').select('*').eq('employee_number', empId).limit(1),
+        db.from('dependents').select('*').eq('employee_number', empId),
+        db.from('education').select('*').eq('employee_number', empId),
+        db.from('character_references').select('*').eq('employee_number', empId),
+        db.from('employee_positions').select('*').eq('employee_number', empId).limit(1)
+    ]);
+    return {
+        emp: (empArr && empArr[0]) || {},
+        emg: (emgArr && emgArr[0]) || {},
+        pos: (posArr && posArr[0]) || {},
+        deps: deps || [],
+        edus: edus || [],
+        refs: refs || []
+    };
+}
+
+async function fetchForPrint(empId) {
+    const data = await getEmployeeDetails(empId);
+    const e = data.emp, p = data.pos, emg = data.emg;
+    const photoUrl = (e.photo && e.photo !== '') ? e.photo : 'profiles/logo.png';
+    const profileImg = `<img src="${escapeHtml(photoUrl)}" onerror="this.src='profiles/logo.png'" style="width:130px;height:130px;border-radius:12px;object-fit:cover;border:3px solid #2563eb;margin-bottom:15px;box-shadow:0 4px 10px rgba(0,0,0,0.1);">`;
+
+    let h = `
+        <div style="text-align:center;margin-bottom:20px;">
+            <h3 style="font-weight:800;color:#1e3a8a;margin-bottom:2px;">OFFICIAL EMPLOYEE RECORD</h3>
+            <p style="font-size:0.8rem;color:#64748b;letter-spacing:1px;text-transform:uppercase;">CONFIDENTIAL • HR SYSTEM MASTER FILE</p>
+            <div style="height:2px;background:#e2e8f0;width:100%;margin:15px 0 20px 0;"></div>
+            ${profileImg}
+        </div>
+        <table class="table table-bordered align-middle" style="font-size:0.82rem;border-color:#cbd5e1;">
+            <tr class="table-light"><th colspan="4" style="color:#1e3a8a;background:#f1f5f9;"><b>I. PERSONAL INFORMATION</b></th></tr>
+            <tr><td width="20%"><b>Employee No:</b></td><td width="30%" class="fw-bold text-primary">${escapeHtml(e.employee_number)}</td><td width="20%"><b>Portal Pass:</b></td><td width="30%">••••••••</td></tr>
+            <tr><td><b>Full Name:</b></td><td colspan="3" class="fw-semibold">${escapeHtml(e.last_name)}, ${escapeHtml(e.first_name)} ${escapeHtml(e.middle_name)}</td></tr>
+            <tr><td><b>Gender:</b></td><td>${escapeHtml(e.gender)}</td><td><b>Birth Date:</b></td><td>${escapeHtml(e.birth_date)}</td></tr>
+            <tr><td><b>Civil Status:</b></td><td>${escapeHtml(e.civil_status)}</td><td><b>Nationality:</b></td><td>${escapeHtml(e.nationality)}</td></tr>
+            <tr><td><b>Religion:</b></td><td>${escapeHtml(e.religion)}</td><td><b>Email:</b></td><td>${escapeHtml(e.email)}</td></tr>
+            <tr><td><b>Contact No:</b></td><td colspan="3">${escapeHtml(e.contact_no)}</td></tr>
+            <tr><td><b>Permanent Address:</b></td><td colspan="3">${escapeHtml(e.perm_address)}</td></tr>
+            <tr><td><b>Present Address:</b></td><td colspan="3">${escapeHtml(e.pres_address)}</td></tr>
+            <tr class="table-light"><th colspan="4" style="color:#1e3a8a;background:#f1f5f9;"><b>II. GOVERNMENT IDENTIFICATION</b></th></tr>
+            <tr><td><b>SSS No:</b></td><td>${escapeHtml(e.sss_no)}</td><td><b>PhilHealth:</b></td><td>${escapeHtml(e.philhealth_no)}</td></tr>
+            <tr><td><b>Pag-Ibig:</b></td><td>${escapeHtml(e.pagibig_no)}</td><td><b>TIN No:</b></td><td>${escapeHtml(e.tin_no)}</td></tr>
+            <tr><td><b>ATM No:</b></td><td colspan="3">${escapeHtml(e.atm_no)}</td></tr>
+            <tr class="table-light"><th colspan="4" style="color:#1e3a8a;background:#f1f5f9;"><b>III. EMERGENCY CONTACT</b></th></tr>
+            <tr><td><b>Contact Person:</b></td><td>${escapeHtml(emg.name)}</td><td><b>Relationship:</b></td><td>${escapeHtml(emg.relationship)}</td></tr>
+            <tr><td><b>Address:</b></td><td>${escapeHtml(emg.address)}</td><td><b>Contact No:</b></td><td>${escapeHtml(emg.contact)}</td></tr>
+            <tr class="table-light"><th colspan="4" style="color:#1e3a8a;background:#f1f5f9;"><b>IV. POSITION & ASSIGNMENT</b></th></tr>
+            <tr><td><b>Department:</b></td><td>${escapeHtml(p.department)}</td><td><b>Position:</b></td><td>${escapeHtml(p.position)}</td></tr>
+            <tr><td><b>Start Date:</b></td><td>${escapeHtml(p.start_date)}</td><td><b>End Date:</b></td><td>${escapeHtml(p.end_date)}</td></tr>
+            <tr><td><b>Monthly Rate:</b></td><td>₱${p.monthly ? parseFloat(p.monthly).toLocaleString(undefined,{minimumFractionDigits:2}) : '0.00'}</td><td><b>Daily Rate:</b></td><td>₱${p.daily ? parseFloat(p.daily).toLocaleString(undefined,{minimumFractionDigits:2}) : '0.00'}</td></tr>
+            <tr><td><b>Hourly Rate:</b></td><td colspan="3">₱${p.hourly ? parseFloat(p.hourly).toLocaleString(undefined,{minimumFractionDigits:2}) : '0.00'}</td></tr>
+        </table>
+        <h6 class="mt-4 fw-bold text-dark" style="font-size:0.85rem;"><i class="fas fa-users-rectangle text-primary me-2"></i>V. DEPENDENTS</h6>
+        <table class="table table-sm table-bordered" style="font-size:0.8rem;border-color:#cbd5e1;">
+            <thead><tr class="table-light"><th>Name</th><th>Birth Date</th><th>Relationship</th></tr></thead>
+            <tbody>${data.deps.length ? data.deps.map(d => `<tr><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.birth_date)}</td><td>${escapeHtml(d.relationship)}</td></tr>`).join('') : '<tr><td colspan="3" class="text-center text-muted">No records registered</td></tr>'}</tbody>
+        </table>
+        <h6 class="mt-4 fw-bold text-dark" style="font-size:0.85rem;"><i class="fas fa-graduation-cap text-primary me-2"></i>VI. EDUCATIONAL ATTAINMENT</h6>
+        <table class="table table-sm table-bordered" style="font-size:0.8rem;border-color:#cbd5e1;">
+            <thead><tr class="table-light"><th>School</th><th>Address</th><th>S.Y.</th><th>Level</th></tr></thead>
+            <tbody>${data.edus.length ? data.edus.map(ed => `<tr><td>${escapeHtml(ed.school)}</td><td>${escapeHtml(ed.address)}</td><td>${escapeHtml(ed.sy)}</td><td>${escapeHtml(ed.level)}</td></tr>`).join('') : '<tr><td colspan="4" class="text-center text-muted">No records registered</td></tr>'}</tbody>
+        </table>
+        <h6 class="mt-4 fw-bold text-dark" style="font-size:0.85rem;"><i class="fas fa-user-check text-primary me-2"></i>VII. CHARACTER REFERENCES</h6>
+        <table class="table table-sm table-bordered" style="font-size:0.8rem;border-color:#cbd5e1;">
+            <thead><tr class="table-light"><th>Name</th><th>Occupation</th><th>Address</th><th>Contact</th></tr></thead>
+            <tbody>${data.refs.length ? data.refs.map(r => `<tr><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.occupation)}</td><td>${escapeHtml(r.address)}</td><td>${escapeHtml(r.contact)}</td></tr>`).join('') : '<tr><td colspan="4" class="text-center text-muted">No records registered</td></tr>'}</tbody>
+        </table>`;
+    document.getElementById('printBody').innerHTML = h;
+    new bootstrap.Modal(document.getElementById('printModal')).show();
+}
+
+async function loadEmployeeToForm(empId) {
+    const data = await getEmployeeDetails(empId);
+    const e = data.emp, emg = data.emg, p = data.pos;
+
+    inp_emp_no.value = e.employee_number || '';
+    inp_password.value = e.portal_password || '';
+    inp_gender.value = e.gender || 'Male';
+    inp_last_name.value = e.last_name || '';
+    inp_first_name.value = e.first_name || '';
+    inp_middle_name.value = e.middle_name || '';
+    inp_email.value = e.email || '';
+    inp_contact_no.value = e.contact_no || '';
+    inp_birth_date.value = e.birth_date || '';
+    inp_civil_status.value = e.civil_status || '';
+    inp_nationality.value = e.nationality || '';
+    inp_religion.value = e.religion || '';
+    inp_perm_address.value = e.perm_address || '';
+    inp_pres_address.value = e.pres_address || '';
+    inp_sss_no.value = e.sss_no || '';
+    inp_philhealth_no.value = e.philhealth_no || '';
+    inp_pagibig_no.value = e.pagibig_no || '';
+    inp_tin_no.value = e.tin_no || '';
+    inp_atm_no.value = e.atm_no || '';
+    inp_current_photo.value = e.photo || '';
+    pendingPhotoDataUrl = null;
+    preview_img.src = (e.photo && e.photo !== '') ? e.photo : 'profiles/logo.png';
+
+    inp_emg_name.value = emg.name || '';
+    inp_emg_rel.value = emg.relationship || '';
+    inp_emg_addr.value = emg.address || '';
+    inp_emg_con.value = emg.contact || '';
+
+    tbl_dependent.querySelector('tbody').innerHTML = data.deps.map(d =>
+        `<tr><td>${escapeHtml(d.name)}<input type="hidden" class="dep_name" value="${escapeHtml(d.name)}"></td>
+         <td>${escapeHtml(d.birth_date)}<input type="hidden" class="dep_bdate" value="${escapeHtml(d.birth_date)}"></td>
+         <td>${escapeHtml(d.relationship)}<input type="hidden" class="dep_rel" value="${escapeHtml(d.relationship)}"></td></tr>`
+    ).join('');
+
+    tbl_education.querySelector('tbody').innerHTML = data.edus.map(ed =>
+        `<tr><td>${escapeHtml(ed.school)}<input type="hidden" class="edu_school" value="${escapeHtml(ed.school)}"></td>
+         <td>${escapeHtml(ed.address)}<input type="hidden" class="edu_addr" value="${escapeHtml(ed.address)}"></td>
+         <td>${escapeHtml(ed.sy)}<input type="hidden" class="edu_sy" value="${escapeHtml(ed.sy)}"></td>
+         <td>${escapeHtml(ed.level)}<input type="hidden" class="edu_level" value="${escapeHtml(ed.level)}"></td></tr>`
+    ).join('');
+
+    tbl_reference.querySelector('tbody').innerHTML = data.refs.map(r =>
+        `<tr><td>${escapeHtml(r.name)}<input type="hidden" class="ref_name" value="${escapeHtml(r.name)}"></td>
+         <td>${escapeHtml(r.occupation)}<input type="hidden" class="ref_occ" value="${escapeHtml(r.occupation)}"></td>
+         <td>${escapeHtml(r.address)}<input type="hidden" class="ref_addr" value="${escapeHtml(r.address)}"></td>
+         <td>${escapeHtml(r.contact)}<input type="hidden" class="ref_con" value="${escapeHtml(r.contact)}"></td></tr>`
+    ).join('');
+
+    const posTbody = tbl_position.querySelector('tbody');
+    posTbody.innerHTML = '';
+    if (p.department && p.position) {
+        p_dept.value = p.department;
+        p_pos.value = p.position;
+        p_start_date.value = p.start_date || '';
+        p_end_date.value = p.end_date || '';
+        p_monthly.value = p.monthly || '';
+        p_daily.value = p.daily || '';
+        p_hourly.value = p.hourly || '';
+        posTbody.innerHTML = `<tr>
+            <td>${escapeHtml(p.department)}<input type="hidden" id="hid_dept" value="${escapeHtml(p.department)}"></td>
+            <td>${escapeHtml(p.position)}<input type="hidden" id="hid_pos" value="${escapeHtml(p.position)}"></td>
+            <td>${escapeHtml(p.start_date)} - ${escapeHtml(p.end_date)}<input type="hidden" id="hid_start" value="${escapeHtml(p.start_date)}"><input type="hidden" id="hid_end" value="${escapeHtml(p.end_date)}"></td>
+            <td>M: ₱${p.monthly || 0} | D: ₱${p.daily || 0} | H: ₱${p.hourly || 0}<input type="hidden" id="hid_monthly" value="${p.monthly || 0}"><input type="hidden" id="hid_daily" value="${p.daily || 0}"><input type="hidden" id="hid_hourly" value="${p.hourly || 0}"></td>
+        </tr>`;
+    }
+
+    const modalEl = document.getElementById('viewModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) modalInstance.hide();
+    new bootstrap.Tab(document.querySelector('#myTab button[data-bs-target="#personal"]')).show();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function deleteEmployeeFromTable(empId) {
+    if (!confirm('Are you sure you want to permanently delete this employee record?')) return;
+    await Promise.all([
+        db.from('dependents').delete().eq('employee_number', empId),
+        db.from('education').delete().eq('employee_number', empId),
+        db.from('character_references').delete().eq('employee_number', empId),
+        db.from('emergency_contacts').delete().eq('employee_number', empId),
+        db.from('employee_positions').delete().eq('employee_number', empId),
+        db.from('employees').delete().eq('employee_number', empId)
+    ]);
+    openViewModal();
+}
+
+document.getElementById('employeeForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const empNo = inp_emp_no.value.trim();
+    if (!empNo) return alert('Employee Number is required!');
+
+    const btn = document.getElementById('btnSaveEmp');
+    btn.disabled = true;
+
+    const empPayload = {
+        employee_number: empNo,
+        portal_password: inp_password.value,
+        last_name: inp_last_name.value,
+        first_name: inp_first_name.value,
+        middle_name: inp_middle_name.value,
+        gender: inp_gender.value,
+        email: inp_email.value,
+        civil_status: inp_civil_status.value,
+        nationality: inp_nationality.value,
+        religion: inp_religion.value,
+        birth_date: inp_birth_date.value || null,
+        perm_address: inp_perm_address.value,
+        pres_address: inp_pres_address.value,
+        contact_no: inp_contact_no.value,
+        sss_no: inp_sss_no.value,
+        philhealth_no: inp_philhealth_no.value,
+        pagibig_no: inp_pagibig_no.value,
+        atm_no: inp_atm_no.value,
+        tin_no: inp_tin_no.value,
+        photo: pendingPhotoDataUrl || inp_current_photo.value || ''
+    };
+
+    const { error: empErr } = await db.from('employees').upsert(empPayload, { onConflict: 'employee_number' });
+    if (empErr) {
+        btn.disabled = false;
+        alert('Error saving employee: ' + empErr.message);
+        return;
+    }
+
+    await Promise.all([
+        db.from('emergency_contacts').delete().eq('employee_number', empNo),
+        db.from('dependents').delete().eq('employee_number', empNo),
+        db.from('education').delete().eq('employee_number', empNo),
+        db.from('character_references').delete().eq('employee_number', empNo),
+        db.from('employee_positions').delete().eq('employee_number', empNo)
+    ]);
+
+    const inserts = [];
+    inserts.push(db.from('emergency_contacts').insert({
+        employee_number: empNo,
+        name: inp_emg_name.value,
+        relationship: inp_emg_rel.value,
+        address: inp_emg_addr.value,
+        contact: inp_emg_con.value
+    }));
+
+    const depNames = document.querySelectorAll('#tbl_dependent .dep_name');
+    const depBdates = document.querySelectorAll('#tbl_dependent .dep_bdate');
+    const depRels = document.querySelectorAll('#tbl_dependent .dep_rel');
+    const depRows = [];
+    depNames.forEach((el, i) => {
+        if (el.value) depRows.push({ employee_number: empNo, name: el.value, birth_date: depBdates[i].value || null, relationship: depRels[i].value });
+    });
+    if (depRows.length) inserts.push(db.from('dependents').insert(depRows));
+
+    const eduSchools = document.querySelectorAll('#tbl_education .edu_school');
+    const eduAddrs = document.querySelectorAll('#tbl_education .edu_addr');
+    const eduSys = document.querySelectorAll('#tbl_education .edu_sy');
+    const eduLvls = document.querySelectorAll('#tbl_education .edu_level');
+    const eduRows = [];
+    eduSchools.forEach((el, i) => {
+        if (el.value) eduRows.push({ employee_number: empNo, school: el.value, address: eduAddrs[i].value, sy: eduSys[i].value, level: eduLvls[i].value });
+    });
+    if (eduRows.length) inserts.push(db.from('education').insert(eduRows));
+
+    const refNames = document.querySelectorAll('#tbl_reference .ref_name');
+    const refOccs = document.querySelectorAll('#tbl_reference .ref_occ');
+    const refAddrs = document.querySelectorAll('#tbl_reference .ref_addr');
+    const refCons = document.querySelectorAll('#tbl_reference .ref_con');
+    const refRows = [];
+    refNames.forEach((el, i) => {
+        if (el.value) refRows.push({ employee_number: empNo, name: el.value, occupation: refOccs[i].value, address: refAddrs[i].value, contact: refCons[i].value });
+    });
+    if (refRows.length) inserts.push(db.from('character_references').insert(refRows));
+
+    const posDept = document.getElementById('hid_dept')?.value || p_dept.value;
+    const posTitle = document.getElementById('hid_pos')?.value || p_pos.value;
+    if (posDept || posTitle) {
+        inserts.push(db.from('employee_positions').insert({
+            employee_number: empNo,
+            department: posDept,
+            position: posTitle,
+            start_date: (document.getElementById('hid_start')?.value || p_start_date.value) || null,
+            end_date: (document.getElementById('hid_end')?.value || p_end_date.value) || null,
+            monthly: parseFloat(document.getElementById('hid_monthly')?.value || p_monthly.value) || 0,
+            daily: parseFloat(document.getElementById('hid_daily')?.value || p_daily.value) || 0,
+            hourly: parseFloat(document.getElementById('hid_hourly')?.value || p_hourly.value) || 0
+        }));
+    }
+
+    await Promise.all(inserts);
+    btn.disabled = false;
+    alert('Employee Saved Successfully!');
+    resetEmployeeForm();
+});
+
+loadDeptAndPosDropdowns();
+</script>
+</body>
+</html>
