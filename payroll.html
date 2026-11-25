@@ -24,193 +24,34 @@
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
             --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
         }
-        body {
-            background-color: var(--bg-body);
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--text-main);
-            font-size: 0.88rem;
-            letter-spacing: -0.01em;
-        }
-        .navbar-custom {
-            background-color: #ffffff;
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 24px;
-            box-shadow: var(--shadow-sm);
-        }
-        .navbar-custom .navbar-brand {
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: var(--primary) !important;
-            letter-spacing: -0.5px;
-        }
-        .navbar-custom .nav-link {
-            color: var(--secondary) !important;
-            font-weight: 600;
-            font-size: 0.85rem;
-            padding: 8px 16px !important;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-        .navbar-custom .nav-link:hover,
-        .navbar-custom .nav-link.active {
-            color: var(--primary) !important;
-            background-color: var(--primary-light);
-        }
-        .header-card {
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-            border-radius: var(--radius-lg);
-            padding: 22px 28px;
-            color: white;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .header-card h4 {
-            margin: 0;
-            font-weight: 700;
-            font-size: 1.35rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .header-card p {
-            margin: 4px 0 0 0;
-            font-size: 0.82rem;
-            opacity: 0.85;
-        }
-        .mgmt-card {
-            background-color: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-        }
-        .section-card-header {
-            background: #f8fafc;
-            border-bottom: 1px solid var(--border-color);
-            padding: 14px 22px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-        .section-card-header h6 {
-            margin: 0;
-            font-weight: 700;
-            color: #1e3a8a;
-            font-size: 0.95rem;
-        }
-        .toolbar {
-            background: #ffffff;
-            padding: 12px 20px;
-            border-radius: var(--radius-lg);
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
-        }
-        .btn-tool {
-            background: #ffffff;
-            color: #334155;
-            border: 1px solid var(--border-color);
-            font-size: 0.82rem;
-            padding: 8px 18px;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .btn-tool:hover {
-            background: #f8fafc;
-            color: var(--primary);
-            border-color: #cbd5e1;
-            transform: translateY(-1px);
-        }
-        .table-custom-main {
-            border-collapse: separate;
-            border-spacing: 0;
-            width: 100%;
-        }
-        .table-custom-main thead th {
-            background-color: #f8fafc;
-            color: #475569;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 12px 14px;
-            border-bottom: 1.5px solid var(--border-color);
-        }
-        .table-custom-main tbody td {
-            padding: 12px 14px;
-            font-size: 0.85rem;
-            color: #334155;
-            border-bottom: 1px solid #f1f5f9;
-            vertical-align: middle;
-        }
-        .table-custom-main tbody tr:hover td {
-            background-color: #f8fafc;
-        }
-        .btn-action-del {
-            color: #ef4444;
-            background: #fee2e2;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-action-del:hover {
-            background: #fecaca;
-            color: #dc2626;
-            transform: scale(1.05);
-        }
-        .modal-content {
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-        }
-        .modal-header {
-            padding: 16px 20px;
-            background: #f8fafc;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .form-control, .form-select {
-            border: 1.5px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 0.85rem;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-            outline: none;
-        }
+        body { background-color: var(--bg-body); font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text-main); font-size: 0.88rem; letter-spacing: -0.01em; }
+        .navbar-custom { background-color: #ffffff; border-bottom: 1px solid var(--border-color); padding: 12px 24px; box-shadow: var(--shadow-sm); }
+        .navbar-custom .navbar-brand { font-weight: 700; font-size: 1.15rem; color: var(--primary) !important; letter-spacing: -0.5px; }
+        .navbar-custom .nav-link { color: var(--secondary) !important; font-weight: 600; font-size: 0.85rem; padding: 8px 16px !important; border-radius: 8px; transition: all 0.2s ease; }
+        .navbar-custom .nav-link:hover, .navbar-custom .nav-link.active { color: var(--primary) !important; background-color: var(--primary-light); }
+        .header-card { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); border-radius: var(--radius-lg); padding: 22px 28px; color: white; box-shadow: var(--shadow-md); margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; }
+        .header-card h4 { margin: 0; font-weight: 700; font-size: 1.35rem; display: flex; align-items: center; gap: 12px; }
+        .header-card p { margin: 4px 0 0 0; font-size: 0.82rem; opacity: 0.85; }
+        .mgmt-card { background-color: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; }
+        .section-card-header { background: #f8fafc; border-bottom: 1px solid var(--border-color); padding: 14px 22px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+        .section-card-header h6 { margin: 0; font-weight: 700; color: #1e3a8a; font-size: 0.95rem; }
+        .toolbar { background: #ffffff; padding: 12px 20px; border-radius: var(--radius-lg); margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
+        .btn-tool { background: #ffffff; color: #334155; border: 1px solid var(--border-color); font-size: 0.82rem; padding: 8px 18px; font-weight: 600; border-radius: 8px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; }
+        .btn-tool:hover { background: #f8fafc; color: var(--primary); border-color: #cbd5e1; transform: translateY(-1px); }
+        .table-custom-main { border-collapse: separate; border-spacing: 0; width: 100%; }
+        .table-custom-main thead th { background-color: #f8fafc; color: #475569; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 12px; border-bottom: 1.5px solid var(--border-color); }
+        .table-custom-main tbody td { padding: 12px 12px; font-size: 0.85rem; color: #334155; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .table-custom-main tbody tr:hover td { background-color: #f8fafc; }
+        .btn-action-del { color: #ef4444; background: #fee2e2; border: none; width: 32px; height: 32px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .btn-action-del:hover { background: #fecaca; color: #dc2626; transform: scale(1.05); }
+        .modal-content { border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); overflow: hidden; }
+        .modal-header { padding: 16px 20px; background: #f8fafc; border-bottom: 1px solid var(--border-color); }
+        .form-control, .form-select { border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; }
+        .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); outline: none; }
         @media print {
             body * { visibility: hidden; }
             #payslipPrintArea, #payslipPrintArea * { visibility: visible; }
-            #payslipPrintArea {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                background: white;
-                padding: 25px;
-            }
+            #payslipPrintArea { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 25px; }
             .modal-header, .modal-footer, .btn-close { display: none !important; }
         }
     </style>
@@ -250,7 +91,7 @@
     <div class="header-card">
         <div>
             <h4><i class="fas fa-file-invoice-dollar"></i> Payroll Management & Salary Computation</h4>
-            <p>Manage cutoff payout schedules and view computed employee salaries & payslips.</p>
+            <p>Manage cutoff payout schedules and view computed employee salaries, loans, & payslips.</p>
         </div>
         <div class="d-none d-md-block text-end">
             <span class="badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
@@ -265,6 +106,9 @@
         </button>
         <a href="attendance.html" class="btn-tool">
             <i class="fas fa-user-clock text-primary"></i> EMPLOYEE ATTENDANCE
+        </a>
+        <a href="loans.html" class="btn-tool">
+            <i class="fas fa-hand-holding-usd text-primary"></i> EMPLOYEE LOANS
         </a>
         <a href="reports.html" class="btn-tool">
             <i class="fas fa-print text-primary"></i> FULL PAYROLL REPORT
@@ -293,13 +137,14 @@
                             <th class="text-end">Overtime</th>
                             <th class="text-end">Other Income</th>
                             <th class="text-end text-danger">Tardiness/Abs</th>
+                            <th class="text-end text-danger">Loans</th>
                             <th class="text-end text-danger">Other Ded</th>
                             <th class="text-end text-primary">Net Pay</th>
                             <th class="text-center">Payslip</th>
                         </tr>
                     </thead>
                     <tbody id="salaryBody">
-                        <tr><td colspan="11" class="text-center text-muted py-4">Loading employee salaries...</td></tr>
+                        <tr><td colspan="12" class="text-center text-muted py-4">Loading employee salaries...</td></tr>
                     </tbody>
                     <tfoot id="salaryFoot"></tfoot>
                 </table>
@@ -324,9 +169,7 @@
                         </tr>
                     </thead>
                     <tbody id="payrollBody">
-                        <tr>
-                            <td colspan="4" class="text-center text-muted py-4">Loading...</td>
-                        </tr>
+                        <tr><td colspan="4" class="text-center text-muted py-4">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -344,18 +187,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">START DATE (CUTOFF)</label>
-                        <input type="date" id="dateStart" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">END DATE (CUTOFF)</label>
-                        <input type="date" id="dateEnd" class="form-control" required>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label small fw-bold text-muted">PAY DATE (PAYOUT SCHEDULE)</label>
-                        <input type="date" id="payDate" class="form-control" required>
-                    </div>
+                    <div class="mb-3"><label class="form-label small fw-bold text-muted">START DATE (CUTOFF)</label><input type="date" id="dateStart" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label small fw-bold text-muted">END DATE (CUTOFF)</label><input type="date" id="dateEnd" class="form-control" required></div>
+                    <div class="mb-2"><label class="form-label small fw-bold text-muted">PAY DATE (PAYOUT SCHEDULE)</label><input type="date" id="payDate" class="form-control" required></div>
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="submit" class="btn btn-primary px-4 fw-semibold">Save Payroll Period</button>
@@ -391,7 +225,7 @@
 <script>
 requireAuth();
 
-let cacheData = { periods: [], atts: [], emps: [], empPos: [], inc: [], ded: [], empMap: {}, posMap: {} };
+let cacheData = { periods: [], atts: [], emps: [], empPos: [], inc: [], ded: [], loans: [], empMap: {}, posMap: {} };
 let computedRows = [];
 
 function fmt(num) {
@@ -405,14 +239,16 @@ async function loadAllPayrollData() {
         { data: emps },
         { data: empPos },
         { data: inc },
-        { data: ded }
+        { data: ded },
+        { data: loans }
     ] = await Promise.all([
         db.from('payroll_periods').select('*').order('id', { ascending: false }),
         db.from('attendance').select('*'),
         db.from('employees').select('*').order('last_name', { ascending: true }),
         db.from('employee_positions').select('*'),
         db.from('other_income').select('*'),
-        db.from('other_deductions').select('*')
+        db.from('other_deductions').select('*'),
+        db.from('employee_loans').select('*')
     ]);
 
     if (pErr) {
@@ -432,6 +268,7 @@ async function loadAllPayrollData() {
         empPos: empPos || [],
         inc: inc || [],
         ded: ded || [],
+        loans: loans || [],
         empMap,
         posMap
     };
@@ -497,7 +334,7 @@ function renderSalaries() {
 
     if (!rows.length) {
         computedRows = [];
-        tbody.innerHTML = `<tr><td colspan="11" class="text-center text-muted py-4">No attendance/salary records found for this pay date. Encode attendance first in <b>Attendance</b>.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="text-center text-muted py-4">No attendance/salary records found for this pay date. Encode attendance first in <b>Attendance</b>.</td></tr>`;
         tfoot.innerHTML = '';
         return;
     }
@@ -513,6 +350,10 @@ function renderSalaries() {
             .filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date)
             .reduce((s, x) => s + Number(x.amount || 0), 0);
 
+        const empLoans = cacheData.loans.filter(l => l.employee_number === row.employee_number);
+        const loanDed = empLoans.reduce((s, l) => s + Number(l.amount || 0), 0);
+        const loanTypes = empLoans.map(l => l.loan_type).filter(Boolean).join(', ');
+
         const dailyRate = Number(row.daily) > 0 ? Number(row.daily) : Number(p.daily || 0);
         const hourlyRate = dailyRate / 8;
         const absences = Number(row.absences || 0);
@@ -522,7 +363,7 @@ function renderSalaries() {
         const otPay = otHours * (hourlyRate * 1.25);
         const tardyHours = Number(row.tardiness || 0) + Number(row.undertime || 0);
         const tardyDed = tardyHours * hourlyRate;
-        const netPay = (basicPay + otPay + otherInc) - (tardyDed + otherDed);
+        const netPay = (basicPay + otPay + otherInc) - (tardyDed + loanDed + otherDed);
         grandNet += netPay;
 
         return {
@@ -540,6 +381,8 @@ function renderSalaries() {
             otherInc,
             tardyHours,
             tardyDed,
+            loanDed,
+            loanTypes,
             otherDed,
             netPay
         };
@@ -555,6 +398,7 @@ function renderSalaries() {
             <td class="text-end text-success">+₱${fmt(c.otPay)}</td>
             <td class="text-end text-success">+₱${fmt(c.otherInc)}</td>
             <td class="text-end text-danger">-₱${fmt(c.tardyDed)}</td>
+            <td class="text-end text-danger" title="${escapeHtml(c.loanTypes)}">-₱${fmt(c.loanDed)}</td>
             <td class="text-end text-danger">-₱${fmt(c.otherDed)}</td>
             <td class="text-end fw-bold text-primary" style="font-size: 0.95rem;">₱${fmt(c.netPay)}</td>
             <td class="text-center">
@@ -567,7 +411,7 @@ function renderSalaries() {
 
     tfoot.innerHTML = `
         <tr class="table-light fw-bold">
-            <td colspan="9" class="text-end">TOTAL PAYROLL DISBURSEMENT:</td>
+            <td colspan="10" class="text-end">TOTAL PAYROLL DISBURSEMENT:</td>
             <td class="text-end text-primary" style="font-size: 1.05rem;">₱${fmt(grandNet)}</td>
             <td></td>
         </tr>`;
@@ -577,7 +421,8 @@ function openPayslip(idx) {
     const c = computedRows[idx];
     if (!c) return;
     const totalEarnings = c.basicPay + c.otPay + c.otherInc;
-    const totalDeductions = c.tardyDed + c.otherDed;
+    const totalDeductions = c.tardyDed + c.loanDed + c.otherDed;
+    const loanLabel = c.loanTypes ? `Loans (${escapeHtml(c.loanTypes)})` : 'Loans';
 
     document.getElementById('payslipContent').innerHTML = `
         <div class="text-center mb-3 pb-3 border-bottom">
@@ -613,6 +458,7 @@ function openPayslip(idx) {
                     <tbody>
                         <tr><td>Tardiness / Undertime (${c.tardyHours} hrs)</td><td class="text-end">₱${fmt(c.tardyDed)}</td></tr>
                         <tr><td>Absences (${c.absences} days deducted from basic)</td><td class="text-end">₱0.00</td></tr>
+                        <tr><td>${loanLabel}</td><td class="text-end">₱${fmt(c.loanDed)}</td></tr>
                         <tr><td>Other Deductions</td><td class="text-end">₱${fmt(c.otherDed)}</td></tr>
                         <tr class="table-light fw-bold"><td>Total Deductions</td><td class="text-end text-danger">₱${fmt(totalDeductions)}</td></tr>
                     </tbody>
