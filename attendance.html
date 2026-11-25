@@ -13,8 +13,8 @@
     <style>
         :root {
             --primary: #2563eb;
+            --primary-dark: #1d4ed8;
             --primary-light: #eff6ff;
-            --teal-custom: #0f766e;
             --secondary: #64748b;
             --bg-body: #f8fafc;
             --border-color: #e2e8f0;
@@ -57,7 +57,7 @@
             background-color: var(--primary-light);
         }
         .header-card {
-            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
             border-radius: var(--radius-lg);
             padding: 22px 28px;
             color: white;
@@ -78,7 +78,7 @@
         .header-card p {
             margin: 4px 0 0 0;
             font-size: 0.82rem;
-            opacity: 0.9;
+            opacity: 0.85;
         }
         .toolbar {
             background: #ffffff;
@@ -110,7 +110,7 @@
         }
         .btn-tool:hover {
             background: #f8fafc;
-            color: var(--teal-custom);
+            color: var(--primary);
             border-color: #cbd5e1;
             transform: translateY(-1px);
         }
@@ -127,7 +127,7 @@
             width: 100%;
         }
         .table-custom-main thead th {
-            background-color: #0f766e;
+            background-color: #2563eb;
             color: #ffffff;
             font-size: 0.76rem;
             font-weight: 700;
@@ -149,8 +149,8 @@
             background-color: #f8fafc;
         }
         .btn-action-edit {
-            color: #0f766e;
-            background: #ccfbf1;
+            color: var(--primary);
+            background: var(--primary-light);
             border: none;
             width: 32px;
             height: 32px;
@@ -161,8 +161,8 @@
             transition: 0.2s;
         }
         .btn-action-edit:hover {
-            background: #99f6e4;
-            color: #115e59;
+            background: #dbeafe;
+            color: var(--primary-dark);
             transform: scale(1.05);
         }
         .btn-action-del {
@@ -209,8 +209,8 @@
             font-size: 0.85rem;
         }
         .form-control:focus, .form-select:focus {
-            border-color: #0d9488;
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
             outline: none;
         }
     </style>
@@ -253,16 +253,16 @@
             <p>Encode, manage, and verify daily employee attendance, absences, undertime, and overtime.</p>
         </div>
         <div class="d-none d-md-block text-end">
-            <span class="badge bg-white text-dark px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.95rem;">
-                <i class="fas fa-clock-rotate-left text-teal me-1"></i> Total Encoded: <span id="totalAttCount">0</span>
+            <span class="badge bg-white text-primary px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.95rem;">
+                <i class="fas fa-clock-rotate-left text-primary me-1"></i> Total Encoded: <span id="totalAttCount">0</span>
             </span>
         </div>
     </div>
 
     <div class="toolbar">
         <div class="d-flex gap-2">
-            <button class="btn-tool text-teal fw-bold" onclick="openAttendanceModal()">
-                <i class="fas fa-plus-circle text-success"></i> Add New Attendance
+            <button class="btn-tool fw-bold" onclick="openAttendanceModal()">
+                <i class="fas fa-plus-circle text-primary"></i> Add New Attendance
             </button>
             <a href="payroll.html" class="btn-tool">
                 <i class="fas fa-calendar-check text-primary"></i> Cutoff Schedules
@@ -309,7 +309,7 @@
                 <input type="hidden" id="att_id" value="">
 
                 <div class="modal-header">
-                    <h5 class="fw-bold text-teal" id="modalTitle"><i class="fas fa-clock text-teal me-2"></i>EMPLOYEE ATTENDANCE</h5>
+                    <h5 class="fw-bold text-primary" id="modalTitle"><i class="fas fa-clock text-primary me-2"></i>EMPLOYEE ATTENDANCE</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -345,7 +345,7 @@
                 </div>
 
                 <div class="modal-footer bg-light">
-                    <button type="submit" class="btn btn-success text-white px-4 fw-semibold">SAVE</button>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">SAVE</button>
                     <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">CANCEL</button>
                 </div>
             </form>
@@ -441,7 +441,7 @@ function openAttendanceModal() {
     document.getElementById('inp_tardiness').value = '0';
     document.getElementById('inp_undertime').value = '0';
     document.getElementById('inp_overtime').value = '0';
-    document.getElementById('modalTitle').innerHTML = '<i class="fas fa-clock text-teal me-2"></i>ADD EMPLOYEE ATTENDANCE';
+    document.getElementById('modalTitle').innerHTML = '<i class="fas fa-clock text-primary me-2"></i>ADD EMPLOYEE ATTENDANCE';
     new bootstrap.Modal(document.getElementById('attendanceModal')).show();
 }
 
@@ -463,7 +463,7 @@ function editAttendance(id) {
     document.getElementById('inp_tardiness').value = data.tardiness || '0';
     document.getElementById('inp_undertime').value = data.undertime || '0';
     document.getElementById('inp_overtime').value = data.overtime || '0';
-    document.getElementById('modalTitle').innerHTML = '<i class="fas fa-pen-to-square text-teal me-2"></i>EDIT EMPLOYEE ATTENDANCE';
+    document.getElementById('modalTitle').innerHTML = '<i class="fas fa-pen-to-square text-primary me-2"></i>EDIT EMPLOYEE ATTENDANCE';
     new bootstrap.Modal(document.getElementById('attendanceModal')).show();
 }
 
