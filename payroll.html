@@ -48,11 +48,164 @@
         .modal-header { padding: 16px 20px; background: #f8fafc; border-bottom: 1px solid var(--border-color); }
         .form-control, .form-select { border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; }
         .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); outline: none; }
+
+        /* Payslip Layout (Aligned Side-by-Side) */
+        .payslip-paper {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 24px;
+            background: #ffffff;
+        }
+        .payslip-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+        }
+        .payslip-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .payslip-brand img {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .payslip-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 24px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 18px;
+            font-size: 0.83rem;
+        }
+        .payslip-info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .payslip-info-row span:first-child { color: #64748b; font-weight: 600; }
+        .payslip-info-row span:last-child { color: #0f172a; font-weight: 700; text-align: right; }
+
+        .payslip-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            align-items: stretch;
+        }
+        .payslip-box {
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .payslip-box-title {
+            padding: 9px 14px;
+            font-weight: 800;
+            font-size: 0.78rem;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+        .payslip-box-title.earn { background: #ecfdf5; color: #047857; border-bottom: 1px solid #a7f3d0; }
+        .payslip-box-title.ded { background: #fef2f2; color: #b91c1c; border-bottom: 1px solid #fecaca; }
+
+        .payslip-table {
+            width: 100%;
+            margin: 0;
+            font-size: 0.83rem;
+            flex: 1;
+        }
+        .payslip-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .payslip-table td:last-child {
+            text-align: right;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .payslip-total-bar {
+            padding: 10px 14px;
+            background: #f8fafc;
+            border-top: 1.5px solid #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+            font-size: 0.86rem;
+        }
+        .payslip-net-banner {
+            margin-top: 16px;
+            padding: 14px 20px;
+            border-radius: 10px;
+            background: #eff6ff;
+            border: 1.5px solid #93c5fd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .payslip-signatures {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 28px;
+            padding-top: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .sig-line {
+            border-top: 1px solid #334155;
+            margin-top: 28px;
+            padding-top: 5px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        @media (max-width: 576px) {
+            .payslip-info-grid, .payslip-columns { grid-template-columns: 1fr; }
+        }
+
+        /* Clean Full-Page Print for Payslip Modal */
         @media print {
-            body * { visibility: hidden; }
-            #payslipPrintArea, #payslipPrintArea * { visibility: visible; }
-            #payslipPrintArea { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 25px; }
-            .modal-header, .modal-footer, .btn-close { display: none !important; }
+            @page { size: portrait; margin: 12mm; }
+            body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body > *:not(#payslipModal) { display: none !important; }
+            #payslipModal {
+                position: static !important;
+                display: block !important;
+                overflow: visible !important;
+                width: 100% !important;
+                height: auto !important;
+                padding: 0 !important;
+            }
+            #payslipModal .modal-dialog {
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+                transform: none !important;
+            }
+            #payslipModal .modal-content {
+                border: none !important;
+                box-shadow: none !important;
+            }
+            #payslipModal .modal-header,
+            #payslipModal .modal-footer,
+            #payslipModal .btn-close {
+                display: none !important;
+            }
+            #payslipPrintArea {
+                padding: 0 !important;
+            }
+            .payslip-info-grid, .payslip-columns {
+                grid-template-columns: 1fr 1fr !important;
+            }
         }
     </style>
 </head>
@@ -68,7 +221,7 @@
             <ul class="navbar-nav me-auto ms-4 gap-1">
                 <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> DASHBOARD</a></li>
                 <li class="nav-item"><a class="nav-link" href="employee.html"><i class="fas fa-users me-1"></i> Employees</a></li>
-                <li class="nav-item"><a class="nav-link" href="dept.html"><i class="fas fa-sitemap me-1"></i> Dept & Position</a></li>
+                <li class="nav-item"><a class="nav-link" href="dept.html"><i class="fas fa-sitemap me-1"></i> Dept &amp; Position</a></li>
                 <li class="nav-item"><a class="nav-link" href="loans.html"><i class="fas fa-hand-holding-usd me-1"></i> Loans</a></li>
                 <li class="nav-item"><a class="nav-link" href="attendance.html"><i class="fas fa-user-clock me-1"></i> Attendance</a></li>
                 <li class="nav-item"><a class="nav-link active text-primary" href="payroll.html"><i class="fas fa-file-invoice-dollar me-1"></i> Payroll</a></li>
@@ -90,8 +243,8 @@
 <div class="container-fluid px-4 pb-5">
     <div class="header-card">
         <div>
-            <h4><i class="fas fa-file-invoice-dollar"></i> Payroll Management & Salary Computation</h4>
-            <p>Manage cutoff payout schedules and view computed employee salaries, loans, & payslips.</p>
+            <h4><i class="fas fa-file-invoice-dollar"></i> Payroll Management &amp; Salary Computation</h4>
+            <p>Manage cutoff payout schedules and view computed employee salaries, loans, &amp; payslips.</p>
         </div>
         <div class="d-none d-md-block text-end">
             <span class="badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
@@ -107,7 +260,6 @@
         <a href="attendance.html" class="btn-tool">
             <i class="fas fa-user-clock text-primary"></i> EMPLOYEE ATTENDANCE
         </a>
-       
     </div>
 
     <!-- SECTION 1: EMPLOYEE SALARIES / COMPUTATION -->
@@ -338,12 +490,13 @@ function renderSalaries() {
     computedRows = rows.map(row => {
         const e = empMap[row.employee_number] || {};
         const p = posMap[row.employee_number] || {};
-        const otherInc = cacheData.inc
-            .filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date)
-            .reduce((s, x) => s + Number(x.amount || 0), 0);
-        const otherDed = cacheData.ded
-            .filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date)
-            .reduce((s, x) => s + Number(x.amount || 0), 0);
+        const periodObj = cacheData.periods.find(pr => pr.pay_date === row.pay_date);
+
+        const incItems = cacheData.inc.filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date);
+        const otherInc = incItems.reduce((s, x) => s + Number(x.amount || 0), 0);
+
+        const dedItems = cacheData.ded.filter(x => x.employee_number === row.employee_number && x.pay_date === row.pay_date);
+        const otherDed = dedItems.reduce((s, x) => s + Number(x.amount || 0), 0);
 
         const empLoans = cacheData.loans.filter(l => l.employee_number === row.employee_number);
         const loanDed = empLoans.reduce((s, l) => s + Number(l.amount || 0), 0);
@@ -351,13 +504,22 @@ function renderSalaries() {
 
         const dailyRate = Number(row.daily) > 0 ? Number(row.daily) : Number(p.daily || 0);
         const hourlyRate = dailyRate / 8;
+
+        const grossBasicPay = 13 * dailyRate;
         const absences = Number(row.absences || 0);
+        const absencesDed = absences * dailyRate;
         const daysWorked = Math.max(0, 13 - absences);
         const basicPay = daysWorked * dailyRate;
+
         const otHours = Number(row.overtime || 0);
         const otPay = otHours * (hourlyRate * 1.25);
-        const tardyHours = Number(row.tardiness || 0) + Number(row.undertime || 0);
-        const tardyDed = tardyHours * hourlyRate;
+
+        const tardinessHrs = Number(row.tardiness || 0);
+        const undertimeHrs = Number(row.undertime || 0);
+        const tardinessDed = tardinessHrs * hourlyRate;
+        const undertimeDed = undertimeHrs * hourlyRate;
+        const tardyDed = tardinessDed + undertimeDed;
+
         const netPay = (basicPay + otPay + otherInc) - (tardyDed + loanDed + otherDed);
         grandNet += netPay;
 
@@ -367,17 +529,27 @@ function renderSalaries() {
             department: p.department || 'N/A',
             position: p.position || 'N/A',
             payDate: row.pay_date,
+            cutoffRange: periodObj ? `${periodObj.start_date} to ${periodObj.end_date}` : row.pay_date,
             dailyRate,
+            hourlyRate,
             daysWorked,
+            grossBasicPay,
             absences,
+            absencesDed,
             basicPay,
             otHours,
             otPay,
+            incItems,
             otherInc,
-            tardyHours,
+            tardinessHrs,
+            undertimeHrs,
+            tardinessDed,
+            undertimeDed,
             tardyDed,
+            empLoans,
             loanDed,
             loanTypes,
+            dedItems,
             otherDed,
             netPay
         };
@@ -415,54 +587,99 @@ function renderSalaries() {
 function openPayslip(idx) {
     const c = computedRows[idx];
     if (!c) return;
-    const totalEarnings = c.basicPay + c.otPay + c.otherInc;
-    const totalDeductions = c.tardyDed + c.loanDed + c.otherDed;
-    const loanLabel = c.loanTypes ? `Loans (${escapeHtml(c.loanTypes)})` : 'Loans';
+
+    const totalEarnings = c.grossBasicPay + c.otPay + c.otherInc;
+    const totalDeductions = c.absencesDed + c.tardinessDed + c.undertimeDed + c.loanDed + c.otherDed;
+
+    const otherIncRows = c.incItems.length
+        ? c.incItems.map(i => `<tr><td>Other Income (${escapeHtml(i.income_type)})</td><td>₱${fmt(i.amount)}</td></tr>`).join('')
+        : `<tr><td>Other Income</td><td>₱0.00</td></tr>`;
+
+    const loanRows = c.empLoans.length
+        ? c.empLoans.map(l => `<tr><td>Loan (${escapeHtml(l.loan_type)})</td><td>₱${fmt(l.amount)}</td></tr>`).join('')
+        : `<tr><td>Loans</td><td>₱0.00</td></tr>`;
+
+    const otherDedRows = c.dedItems.length
+        ? c.dedItems.map(d => `<tr><td>Other Deduction (${escapeHtml(d.deduction_type)})</td><td>₱${fmt(d.amount)}</td></tr>`).join('')
+        : `<tr><td>Other Deductions</td><td>₱0.00</td></tr>`;
 
     document.getElementById('payslipContent').innerHTML = `
-        <div class="text-center mb-3 pb-3 border-bottom">
-            <h4 class="fw-bold text-primary mb-1">LCC PAYROLL SYSTEM</h4>
-            <p class="text-muted small mb-0">OFFICIAL EMPLOYEE PAYSLIP</p>
-        </div>
-        <div class="row mb-3 small">
-            <div class="col-6">
-                <div><b>Employee No:</b> ${escapeHtml(c.empNo)}</div>
-                <div><b>Employee Name:</b> ${escapeHtml(c.fullName)}</div>
+        <div class="payslip-paper">
+            <div class="payslip-top">
+                <div class="payslip-brand">
+                    <img src="profiles/logo.png" alt="LCC Logo">
+                    <div>
+                        <h5 class="fw-bold text-primary mb-0">LIPA CITY COLLEGES</h5>
+                        <div class="small text-muted fw-semibold">OFFICIAL EMPLOYEE PAYSLIP</div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="small text-muted fw-bold">PAYOUT DATE</div>
+                    <div class="fw-bold text-primary">${escapeHtml(c.payDate)}</div>
+                </div>
             </div>
-            <div class="col-6 text-end">
-                <div><b>Department:</b> ${escapeHtml(c.department)}</div>
-                <div><b>Position:</b> ${escapeHtml(c.position)}</div>
-                <div><b>Pay Date:</b> ${escapeHtml(c.payDate)}</div>
+
+            <div class="payslip-info-grid">
+                <div class="payslip-info-row"><span>Employee No:</span><span>${escapeHtml(c.empNo)}</span></div>
+                <div class="payslip-info-row"><span>Department:</span><span>${escapeHtml(c.department)}</span></div>
+                <div class="payslip-info-row"><span>Employee Name:</span><span>${escapeHtml(c.fullName)}</span></div>
+                <div class="payslip-info-row"><span>Position:</span><span>${escapeHtml(c.position)}</span></div>
+                <div class="payslip-info-row"><span>Daily / Hourly Rate:</span><span>₱${fmt(c.dailyRate)} / ₱${fmt(c.hourlyRate)}</span></div>
+                <div class="payslip-info-row"><span>Cutoff Period:</span><span>${escapeHtml(c.cutoffRange)}</span></div>
             </div>
-        </div>
-        <div class="row g-3">
-            <div class="col-md-6">
-                <table class="table table-sm table-bordered mb-0">
-                    <thead class="table-light"><tr><th colspan="2" class="text-success">EARNINGS</th></tr></thead>
-                    <tbody>
-                        <tr><td>Basic Pay (${c.daysWorked} days @ ₱${fmt(c.dailyRate)})</td><td class="text-end">₱${fmt(c.basicPay)}</td></tr>
-                        <tr><td>Overtime (${c.otHours} hrs)</td><td class="text-end">₱${fmt(c.otPay)}</td></tr>
-                        <tr><td>Other Income</td><td class="text-end">₱${fmt(c.otherInc)}</td></tr>
-                        <tr class="table-light fw-bold"><td>Total Earnings</td><td class="text-end text-success">₱${fmt(totalEarnings)}</td></tr>
-                    </tbody>
-                </table>
+
+            <div class="payslip-columns">
+                <!-- LEFT: EARNINGS -->
+                <div class="payslip-box">
+                    <div class="payslip-box-title earn"><i class="fas fa-plus-circle me-1"></i> Earnings</div>
+                    <table class="payslip-table">
+                        <tbody>
+                            <tr><td>Basic Pay (13 days × ₱${fmt(c.dailyRate)})</td><td>₱${fmt(c.grossBasicPay)}</td></tr>
+                            <tr><td>Overtime (${c.otHours} hrs × 125%)</td><td>₱${fmt(c.otPay)}</td></tr>
+                            ${otherIncRows}
+                        </tbody>
+                    </table>
+                    <div class="payslip-total-bar">
+                        <span>TOTAL EARNINGS</span>
+                        <span class="text-success">₱${fmt(totalEarnings)}</span>
+                    </div>
+                </div>
+
+                <!-- RIGHT: DEDUCTIONS -->
+                <div class="payslip-box">
+                    <div class="payslip-box-title ded"><i class="fas fa-minus-circle me-1"></i> Deductions</div>
+                    <table class="payslip-table">
+                        <tbody>
+                            <tr><td>Absences (${c.absences} day/s)</td><td>₱${fmt(c.absencesDed)}</td></tr>
+                            <tr><td>Tardiness (${c.tardinessHrs} hr/s)</td><td>₱${fmt(c.tardinessDed)}</td></tr>
+                            <tr><td>Undertime (${c.undertimeHrs} hr/s)</td><td>₱${fmt(c.undertimeDed)}</td></tr>
+                            ${loanRows}
+                            ${otherDedRows}
+                        </tbody>
+                    </table>
+                    <div class="payslip-total-bar">
+                        <span>TOTAL DEDUCTIONS</span>
+                        <span class="text-danger">₱${fmt(totalDeductions)}</span>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <table class="table table-sm table-bordered mb-0">
-                    <thead class="table-light"><tr><th colspan="2" class="text-danger">DEDUCTIONS</th></tr></thead>
-                    <tbody>
-                        <tr><td>Tardiness / Undertime (${c.tardyHours} hrs)</td><td class="text-end">₱${fmt(c.tardyDed)}</td></tr>
-                        <tr><td>Absences (${c.absences} days deducted from basic)</td><td class="text-end">₱0.00</td></tr>
-                        <tr><td>${loanLabel}</td><td class="text-end">₱${fmt(c.loanDed)}</td></tr>
-                        <tr><td>Other Deductions</td><td class="text-end">₱${fmt(c.otherDed)}</td></tr>
-                        <tr class="table-light fw-bold"><td>Total Deductions</td><td class="text-end text-danger">₱${fmt(totalDeductions)}</td></tr>
-                    </tbody>
-                </table>
+
+            <div class="payslip-net-banner">
+                <div>
+                    <div class="fw-bold text-dark" style="font-size: 0.95rem;">NET TAKE-HOME PAY</div>
+                    <div class="small text-muted">Total Earnings (₱${fmt(totalEarnings)}) − Total Deductions (₱${fmt(totalDeductions)})</div>
+                </div>
+                <div class="fw-bold text-primary" style="font-size: 1.55rem;">₱${fmt(c.netPay)}</div>
             </div>
-        </div>
-        <div class="mt-4 p-3 rounded-3 bg-light border d-flex justify-content-between align-items-center">
-            <span class="fw-bold fs-6 text-dark">NET TAKE-HOME PAY:</span>
-            <span class="fw-bold fs-4 text-primary">₱${fmt(c.netPay)}</span>
+
+            <div class="payslip-signatures">
+                <div>
+                    <div class="sig-line">Prepared by: Miss Ara (Payroll Admin)</div>
+                </div>
+                <div>
+                    <div class="sig-line">Received by: ${escapeHtml(c.fullName)}</div>
+                </div>
+            </div>
         </div>
     `;
     new bootstrap.Modal(document.getElementById('payslipModal')).show();
