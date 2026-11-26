@@ -213,6 +213,23 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
             outline: none;
         }
+        .input-group .form-control {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .input-group .form-select {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            max-width: 115px;
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+        .unit-preview {
+            font-size: 0.74rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 3px;
+        }
     </style>
 </head>
 <body>
@@ -227,7 +244,7 @@
             <ul class="navbar-nav me-auto ms-4 gap-1">
                 <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> DASHBOARD</a></li>
                 <li class="nav-item"><a class="nav-link" href="employee.html"><i class="fas fa-users me-1"></i> Employees</a></li>
-                <li class="nav-item"><a class="nav-link" href="dept.html"><i class="fas fa-sitemap me-1"></i> Dept & Position</a></li>
+                <li class="nav-item"><a class="nav-link" href="dept.html"><i class="fas fa-sitemap me-1"></i> Dept &amp; Position</a></li>
                 <li class="nav-item"><a class="nav-link" href="loans.html"><i class="fas fa-hand-holding-usd me-1"></i> Loans</a></li>
                 <li class="nav-item"><a class="nav-link active text-primary" href="attendance.html"><i class="fas fa-user-clock me-1"></i> Attendance</a></li>
                 <li class="nav-item"><a class="nav-link" href="payroll.html"><i class="fas fa-file-invoice-dollar me-1"></i> Payroll</a></li>
@@ -327,20 +344,47 @@
                         <input type="number" step="0.01" id="inp_daily" class="form-control" placeholder="0.00" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Absences</label>
+                        <label class="form-label">Absences (Days)</label>
                         <input type="number" step="0.5" id="inp_absences" class="form-control" value="0">
                     </div>
+
+                    <!-- Tardiness with Hours / Mins selector -->
                     <div class="mb-3">
-                        <label class="form-label">Tardiness (Mins/Hrs)</label>
-                        <input type="number" step="0.01" id="inp_tardiness" class="form-control" value="0">
+                        <label class="form-label">Tardiness</label>
+                        <div class="input-group">
+                            <input type="number" step="0.01" id="inp_tardiness" class="form-control" value="0" oninput="updateUnitPreview('tardiness')">
+                            <select id="inp_tardiness_unit" class="form-select" onchange="updateUnitPreview('tardiness')">
+                                <option value="hrs">Hours</option>
+                                <option value="mins">Mins</option>
+                            </select>
+                        </div>
+                        <div class="unit-preview" id="prev_tardiness"></div>
                     </div>
+
+                    <!-- Under Time with Hours / Mins selector -->
                     <div class="mb-3">
-                        <label class="form-label">Under Time (Mins/Hrs)</label>
-                        <input type="number" step="0.01" id="inp_undertime" class="form-control" value="0">
+                        <label class="form-label">Under Time</label>
+                        <div class="input-group">
+                            <input type="number" step="0.01" id="inp_undertime" class="form-control" value="0" oninput="updateUnitPreview('undertime')">
+                            <select id="inp_undertime_unit" class="form-select" onchange="updateUnitPreview('undertime')">
+                                <option value="hrs">Hours</option>
+                                <option value="mins">Mins</option>
+                            </select>
+                        </div>
+                        <div class="unit-preview" id="prev_undertime"></div>
                     </div>
+
+                    <!-- Over Time with Hours / Mins selector -->
                     <div class="mb-3">
-                        <label class="form-label">Over Time (Hours)</label>
-                        <input type="number" step="0.01" id="inp_overtime" class="form-control" value="0">
+                        <label class="form-label">Over Time</label>
+                        <div class="input-group">
+                            <input type="number" step="0.01" id="inp_overtime" class="form-control" value="0" oninput="updateUnitPreview('overtime')">
+                            <select id="inp_overtime_unit" class="form-select" onchange="updateUnitPreview('overtime')">
+                                <option value="hrs">Hours</option>
+                                <option value="mins">Mins</option>
+                            </select>
+                        </div>
+                        <div class="unit-preview" id="prev_overtime"></div>
                     </div>
                 </div>
 
@@ -361,6 +405,35 @@ requireAuth();
 
 let allAttendance = [];
 let empMap = {};
+
+function toHours(val, unit) {
+    const num = parseFloat(val) || 0;
+    if (unit === 'mins') {
+        return Math.round((num / 60) * 100) / 100;
+    }
+    return Math.round(num * 100) / 100;
+}
+
+function updateUnitPreview(field) {
+    const val = document.getElementById('inp_' + field).value;
+    const unit = document.getElementById('inp_' + field + '_unit').value;
+    const prevEl = document.getElementById('prev_' + field);
+    const num = parseFloat(val) || 0;
+
+    if (unit === 'mins' && num > 0) {
+        const hrs = toHours(num, 'mins');
+        prevEl.textContent = `= ${hrs.toFixed(2)} hr(s) sa payroll`;
+    } else {
+        prevEl.textContent = '';
+    }
+}
+
+function formatHrsDisplay(hrsVal) {
+    const hrs = Number(hrsVal || 0);
+    if (hrs === 0) return '0';
+    const mins = Math.round(hrs * 60);
+    return `${hrs} hr${hrs !== 1 ? 's' : ''} <small class="text-muted">(${mins}m)</small>`;
+}
 
 async function loadData() {
     const [{ data: atts }, { data: emps }, { data: posList }, { data: periods }] = await Promise.all([
@@ -417,9 +490,9 @@ function renderAttendance() {
             <td><span class="badge bg-light text-dark border px-2.5 py-1 fw-semibold">${escapeHtml(row.pay_date)}</span></td>
             <td class="fw-bold text-success">₱${Number(row.daily || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td><span class="${row.absences > 0 ? 'text-danger fw-bold' : 'text-muted'}">${escapeHtml(row.absences)}</span></td>
-            <td>${escapeHtml(row.tardiness)}</td>
-            <td>${escapeHtml(row.undertime)}</td>
-            <td><span class="${row.overtime > 0 ? 'text-primary fw-bold' : 'text-muted'}">${escapeHtml(row.overtime)}</span></td>
+            <td>${formatHrsDisplay(row.tardiness)}</td>
+            <td>${formatHrsDisplay(row.undertime)}</td>
+            <td><span class="${row.overtime > 0 ? 'text-primary fw-bold' : 'text-muted'}">${formatHrsDisplay(row.overtime)}</span></td>
             <td>
                 <button type="button" class="btn-action-edit me-1" title="Edit" onclick="editAttendance(${row.id})">
                     <i class="fas fa-pen-to-square"></i>
@@ -439,8 +512,14 @@ function openAttendanceModal() {
     document.getElementById('inp_daily').value = '';
     document.getElementById('inp_absences').value = '0';
     document.getElementById('inp_tardiness').value = '0';
+    document.getElementById('inp_tardiness_unit').value = 'hrs';
     document.getElementById('inp_undertime').value = '0';
+    document.getElementById('inp_undertime_unit').value = 'hrs';
     document.getElementById('inp_overtime').value = '0';
+    document.getElementById('inp_overtime_unit').value = 'hrs';
+    updateUnitPreview('tardiness');
+    updateUnitPreview('undertime');
+    updateUnitPreview('overtime');
     document.getElementById('modalTitle').innerHTML = '<i class="fas fa-clock text-primary me-2"></i>ADD EMPLOYEE ATTENDANCE';
     new bootstrap.Modal(document.getElementById('attendanceModal')).show();
 }
@@ -461,8 +540,14 @@ function editAttendance(id) {
     document.getElementById('inp_daily').value = data.daily || '0.00';
     document.getElementById('inp_absences').value = data.absences || '0';
     document.getElementById('inp_tardiness').value = data.tardiness || '0';
+    document.getElementById('inp_tardiness_unit').value = 'hrs';
     document.getElementById('inp_undertime').value = data.undertime || '0';
+    document.getElementById('inp_undertime_unit').value = 'hrs';
     document.getElementById('inp_overtime').value = data.overtime || '0';
+    document.getElementById('inp_overtime_unit').value = 'hrs';
+    updateUnitPreview('tardiness');
+    updateUnitPreview('undertime');
+    updateUnitPreview('overtime');
     document.getElementById('modalTitle').innerHTML = '<i class="fas fa-pen-to-square text-primary me-2"></i>EDIT EMPLOYEE ATTENDANCE';
     new bootstrap.Modal(document.getElementById('attendanceModal')).show();
 }
@@ -474,9 +559,9 @@ document.getElementById('attendanceForm').addEventListener('submit', async (e) =
         pay_date: document.getElementById('inp_pay_date').value,
         daily: parseFloat(document.getElementById('inp_daily').value) || 0,
         absences: parseFloat(document.getElementById('inp_absences').value) || 0,
-        tardiness: parseFloat(document.getElementById('inp_tardiness').value) || 0,
-        undertime: parseFloat(document.getElementById('inp_undertime').value) || 0,
-        overtime: parseFloat(document.getElementById('inp_overtime').value) || 0
+        tardiness: toHours(document.getElementById('inp_tardiness').value, document.getElementById('inp_tardiness_unit').value),
+        undertime: toHours(document.getElementById('inp_undertime').value, document.getElementById('inp_undertime_unit').value),
+        overtime: toHours(document.getElementById('inp_overtime').value, document.getElementById('inp_overtime_unit').value)
     };
     const id = document.getElementById('att_id').value;
     const { error } = id
