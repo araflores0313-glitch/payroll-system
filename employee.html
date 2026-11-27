@@ -88,6 +88,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
+            align-items: center;
             gap: 10px;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--border-color);
@@ -209,6 +210,7 @@
             padding: 12px 16px;
             font-size: 0.85rem;
             border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
         }
         .btn-add {
             background: var(--primary);
@@ -287,14 +289,16 @@
             <p>Maintain, update, and review masterlist employee credentials and assignments.</p>
         </div>
         <div class="d-none d-md-block text-end">
-            <span class="badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
-                <i class="far fa-calendar-alt me-1"></i> Active Record View
+            <span id="recordModeBadge" class="badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
+                <i class="far fa-calendar-alt me-1"></i> New Record Mode
             </span>
         </div>
     </div>
 
     <form id="employeeForm">
+        <input type="hidden" id="editing_orig_emp_no" value="">
         <input type="hidden" id="inp_current_photo" value="">
+
         <div class="toolbar">
             <button type="button" class="btn-tool" onclick="resetEmployeeForm()"><i class="fas fa-plus-circle text-primary"></i> NEW</button>
             <button type="submit" id="btnSaveEmp" class="btn-tool"><i class="fas fa-check-circle text-success"></i> SAVE</button>
@@ -373,7 +377,7 @@
                     </div>
                 </div>
                 <table class="data-table" id="tbl_dependent">
-                    <thead><tr><th width="40%">Name</th><th width="30%">Birth Date</th><th width="30%">Relationship</th></tr></thead>
+                    <thead><tr><th width="36%">Name</th><th width="27%">Birth Date</th><th width="27%">Relationship</th><th width="10%" class="text-center">Remove</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -390,7 +394,7 @@
                     </div>
                 </div>
                 <table class="data-table" id="tbl_education">
-                    <thead><tr><th width="30%">School</th><th width="40%">Address</th><th width="15%">S.Y.</th><th width="15%">Level</th></tr></thead>
+                    <thead><tr><th width="28%">School</th><th width="34%">Address</th><th width="14%">S.Y.</th><th width="14%">Level</th><th width="10%" class="text-center">Remove</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -407,7 +411,7 @@
                     </div>
                 </div>
                 <table class="data-table" id="tbl_reference">
-                    <thead><tr><th width="25%">Name</th><th width="20%">Occupation</th><th width="35%">Address</th><th width="20%">Contact</th></tr></thead>
+                    <thead><tr><th width="23%">Name</th><th width="18%">Occupation</th><th width="31%">Address</th><th width="18%">Contact</th><th width="10%" class="text-center">Remove</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -416,10 +420,10 @@
             <div class="tab-pane fade" id="position">
                 <div class="bg-light p-3 rounded-3 border mb-4">
                     <div class="row g-3 align-items-end">
-                        <div class="col-md-3"><label class="form-label">Department</label><select id="p_dept" class="form-select"><option value="">-- Select Department --</option></select></div>
-                        <div class="col-md-3"><label class="form-label">Position</label><select id="p_pos" class="form-select"><option value="">-- Select Position --</option></select></div>
-                        <div class="col-md-2"><label class="form-label">Start Date</label><input type="date" id="p_start_date" class="form-control"></div>
-                        <div class="col-md-2"><label class="form-label">End Date</label><input type="date" id="p_end_date" class="form-control"></div>
+                        <div class="col-md-3"><label class="form-label">Department</label><select id="p_dept" class="form-select" onchange="syncPositionPreview()"><option value="">-- Select Department --</option></select></div>
+                        <div class="col-md-3"><label class="form-label">Position</label><select id="p_pos" class="form-select" onchange="syncPositionPreview()"><option value="">-- Select Position --</option></select></div>
+                        <div class="col-md-2"><label class="form-label">Start Date</label><input type="date" id="p_start_date" class="form-control" onchange="syncPositionPreview()"></div>
+                        <div class="col-md-2"><label class="form-label">End Date</label><input type="date" id="p_end_date" class="form-control" onchange="syncPositionPreview()"></div>
                         <div class="col-md-2"><button type="button" class="btn-add w-100" onclick="addRow('position')"><i class="fas fa-check"></i> SET POSITION</button></div>
                         <div class="col-md-4 mt-2"><label class="form-label">Monthly Rate (₱)</label><input type="number" step="0.01" id="p_monthly" class="form-control" oninput="calculateRates('monthly')"></div>
                         <div class="col-md-4 mt-2"><label class="form-label">Daily Rate (₱)</label><input type="number" step="0.01" id="p_daily" class="form-control" oninput="calculateRates('daily')"></div>
@@ -522,6 +526,15 @@ function calculateRates(source) {
         d.value = (val * 8).toFixed(2);
         m.value = ((val * 8) * 26).toFixed(2);
     }
+    syncPositionPreview();
+}
+
+function syncPositionPreview() {
+    let d = p_dept.value, p = p_pos.value, sd = p_start_date.value, ed = p_end_date.value;
+    let m = p_monthly.value || 0, dy = p_daily.value || 0, h = p_hourly.value || 0;
+    if (!d && !p) return;
+    tbl_position.querySelector('tbody').innerHTML =
+        `<tr><td>${escapeHtml(d)}</td><td>${escapeHtml(p)}</td><td>${escapeHtml(sd)} - ${escapeHtml(ed)}</td><td>M: ₱${m} | D: ₱${dy} | H: ₱${h}</td></tr>`;
 }
 
 function addRow(type) {
@@ -531,7 +544,8 @@ function addRow(type) {
         tbl_dependent.querySelector('tbody').insertAdjacentHTML('beforeend',
             `<tr><td>${escapeHtml(n)}<input type="hidden" class="dep_name" value="${escapeHtml(n)}"></td>
              <td>${escapeHtml(b)}<input type="hidden" class="dep_bdate" value="${escapeHtml(b)}"></td>
-             <td>${escapeHtml(r)}<input type="hidden" class="dep_rel" value="${escapeHtml(r)}"></td></tr>`);
+             <td>${escapeHtml(r)}<input type="hidden" class="dep_rel" value="${escapeHtml(r)}"></td>
+             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" onclick="this.closest('tr').remove()"><i class="fas fa-times"></i></button></td></tr>`);
         d_name.value = ''; d_bdate.value = ''; d_rel.value = '';
     } else if (type === 'education') {
         let s = e_school.value.trim(), a = e_addr.value.trim(), y = e_sy.value.trim(), l = e_level.value;
@@ -540,7 +554,8 @@ function addRow(type) {
             `<tr><td>${escapeHtml(s)}<input type="hidden" class="edu_school" value="${escapeHtml(s)}"></td>
              <td>${escapeHtml(a)}<input type="hidden" class="edu_addr" value="${escapeHtml(a)}"></td>
              <td>${escapeHtml(y)}<input type="hidden" class="edu_sy" value="${escapeHtml(y)}"></td>
-             <td>${escapeHtml(l)}<input type="hidden" class="edu_level" value="${escapeHtml(l)}"></td></tr>`);
+             <td>${escapeHtml(l)}<input type="hidden" class="edu_level" value="${escapeHtml(l)}"></td>
+             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" onclick="this.closest('tr').remove()"><i class="fas fa-times"></i></button></td></tr>`);
         e_school.value = ''; e_addr.value = ''; e_sy.value = '';
     } else if (type === 'reference') {
         let n = r_name.value.trim(), o = r_occ.value.trim(), a = r_addr.value.trim(), c = r_con.value.trim();
@@ -549,22 +564,32 @@ function addRow(type) {
             `<tr><td>${escapeHtml(n)}<input type="hidden" class="ref_name" value="${escapeHtml(n)}"></td>
              <td>${escapeHtml(o)}<input type="hidden" class="ref_occ" value="${escapeHtml(o)}"></td>
              <td>${escapeHtml(a)}<input type="hidden" class="ref_addr" value="${escapeHtml(a)}"></td>
-             <td>${escapeHtml(c)}<input type="hidden" class="ref_con" value="${escapeHtml(c)}"></td></tr>`);
+             <td>${escapeHtml(c)}<input type="hidden" class="ref_con" value="${escapeHtml(c)}"></td>
+             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" onclick="this.closest('tr').remove()"><i class="fas fa-times"></i></button></td></tr>`);
         r_name.value = ''; r_occ.value = ''; r_addr.value = ''; r_con.value = '';
     } else if (type === 'position') {
-        let d = p_dept.value, p = p_pos.value, sd = p_start_date.value, ed = p_end_date.value;
-        let m = p_monthly.value || 0, dy = p_daily.value || 0, h = p_hourly.value || 0;
-        if (!d || !p) return;
-        tbl_position.querySelector('tbody').innerHTML =
-            `<tr><td>${escapeHtml(d)}<input type="hidden" id="hid_dept" value="${escapeHtml(d)}"></td>
-             <td>${escapeHtml(p)}<input type="hidden" id="hid_pos" value="${escapeHtml(p)}"></td>
-             <td>${escapeHtml(sd)} - ${escapeHtml(ed)}<input type="hidden" id="hid_start" value="${escapeHtml(sd)}"><input type="hidden" id="hid_end" value="${escapeHtml(ed)}"></td>
-             <td>M: ₱${m} | D: ₱${dy} | H: ₱${h}<input type="hidden" id="hid_monthly" value="${m}"><input type="hidden" id="hid_daily" value="${dy}"><input type="hidden" id="hid_hourly" value="${h}"></td></tr>`;
+        if (!p_dept.value || !p_pos.value) return alert('Please select Department and Position.');
+        syncPositionPreview();
+    }
+}
+
+function setModeUI(isEdit, empNo = '') {
+    const badge = document.getElementById('recordModeBadge');
+    const btn = document.getElementById('btnSaveEmp');
+    if (isEdit) {
+        badge.innerHTML = `<i class="fas fa-pen-to-square me-1"></i> Editing: ${escapeHtml(empNo)}`;
+        badge.className = 'badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold shadow-sm';
+        btn.innerHTML = '<i class="fas fa-check-circle text-success"></i> UPDATE';
+    } else {
+        badge.innerHTML = '<i class="far fa-calendar-alt me-1"></i> New Record Mode';
+        badge.className = 'badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm';
+        btn.innerHTML = '<i class="fas fa-check-circle text-success"></i> SAVE';
     }
 }
 
 function resetEmployeeForm() {
     document.getElementById('employeeForm').reset();
+    document.getElementById('editing_orig_emp_no').value = '';
     document.getElementById('inp_current_photo').value = '';
     pendingPhotoDataUrl = null;
     document.getElementById('preview_img').src = 'profiles/logo.png';
@@ -572,6 +597,7 @@ function resetEmployeeForm() {
     tbl_education.querySelector('tbody').innerHTML = '';
     tbl_reference.querySelector('tbody').innerHTML = '';
     tbl_position.querySelector('tbody').innerHTML = '';
+    setModeUI(false);
 }
 
 async function loadDeptAndPosDropdowns() {
@@ -705,6 +731,9 @@ async function loadEmployeeToForm(empId) {
     const data = await getEmployeeDetails(empId);
     const e = data.emp, emg = data.emg, p = data.pos;
 
+    document.getElementById('editing_orig_emp_no').value = e.employee_number || empId;
+    setModeUI(true, e.employee_number || empId);
+
     inp_emp_no.value = e.employee_number || '';
     inp_password.value = e.portal_password || '';
     inp_gender.value = e.gender || 'Male';
@@ -736,39 +765,36 @@ async function loadEmployeeToForm(empId) {
     tbl_dependent.querySelector('tbody').innerHTML = data.deps.map(d =>
         `<tr><td>${escapeHtml(d.name)}<input type="hidden" class="dep_name" value="${escapeHtml(d.name)}"></td>
          <td>${escapeHtml(d.birth_date)}<input type="hidden" class="dep_bdate" value="${escapeHtml(d.birth_date)}"></td>
-         <td>${escapeHtml(d.relationship)}<input type="hidden" class="dep_rel" value="${escapeHtml(d.relationship)}"></td></tr>`
+         <td>${escapeHtml(d.relationship)}<input type="hidden" class="dep_rel" value="${escapeHtml(d.relationship)}"></td>
+         <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" onclick="this.closest('tr').remove()"><i class="fas fa-times"></i></button></td></tr>`
     ).join('');
 
     tbl_education.querySelector('tbody').innerHTML = data.edus.map(ed =>
         `<tr><td>${escapeHtml(ed.school)}<input type="hidden" class="edu_school" value="${escapeHtml(ed.school)}"></td>
          <td>${escapeHtml(ed.address)}<input type="hidden" class="edu_addr" value="${escapeHtml(ed.address)}"></td>
          <td>${escapeHtml(ed.sy)}<input type="hidden" class="edu_sy" value="${escapeHtml(ed.sy)}"></td>
-         <td>${escapeHtml(ed.level)}<input type="hidden" class="edu_level" value="${escapeHtml(ed.level)}"></td></tr>`
+         <td>${escapeHtml(ed.level)}<input type="hidden" class="edu_level" value="${escapeHtml(ed.level)}"></td>
+         <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" onclick="this.closest('tr').remove()"><i class="fas fa-times"></i></button></td></tr>`
     ).join('');
 
     tbl_reference.querySelector('tbody').innerHTML = data.refs.map(r =>
         `<tr><td>${escapeHtml(r.name)}<input type="hidden" class="ref_name" value="${escapeHtml(r.name)}"></td>
          <td>${escapeHtml(r.occupation)}<input type="hidden" class="ref_occ" value="${escapeHtml(r.occupation)}"></td>
          <td>${escapeHtml(r.address)}<input type="hidden" class="ref_addr" value="${escapeHtml(r.address)}"></td>
-         <td>${escapeHtml(r.contact)}<input type="hidden" class="ref_con" value="${escapeHtml(r.contact)}"></td></tr>`
+         <td>${escapeHtml(r.contact)}<input type="hidden" class="ref_con" value="${escapeHtml(r.contact)}"></td>
+         <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" onclick="this.closest('tr').remove()"><i class="fas fa-times"></i></button></td></tr>`
     ).join('');
 
-    const posTbody = tbl_position.querySelector('tbody');
-    posTbody.innerHTML = '';
-    if (p.department && p.position) {
-        p_dept.value = p.department;
-        p_pos.value = p.position;
-        p_start_date.value = p.start_date || '';
-        p_end_date.value = p.end_date || '';
-        p_monthly.value = p.monthly || '';
-        p_daily.value = p.daily || '';
-        p_hourly.value = p.hourly || '';
-        posTbody.innerHTML = `<tr>
-            <td>${escapeHtml(p.department)}<input type="hidden" id="hid_dept" value="${escapeHtml(p.department)}"></td>
-            <td>${escapeHtml(p.position)}<input type="hidden" id="hid_pos" value="${escapeHtml(p.position)}"></td>
-            <td>${escapeHtml(p.start_date)} - ${escapeHtml(p.end_date)}<input type="hidden" id="hid_start" value="${escapeHtml(p.start_date)}"><input type="hidden" id="hid_end" value="${escapeHtml(p.end_date)}"></td>
-            <td>M: ₱${p.monthly || 0} | D: ₱${p.daily || 0} | H: ₱${p.hourly || 0}<input type="hidden" id="hid_monthly" value="${p.monthly || 0}"><input type="hidden" id="hid_daily" value="${p.daily || 0}"><input type="hidden" id="hid_hourly" value="${p.hourly || 0}"></td>
-        </tr>`;
+    tbl_position.querySelector('tbody').innerHTML = '';
+    p_dept.value = p.department || '';
+    p_pos.value = p.position || '';
+    p_start_date.value = p.start_date || '';
+    p_end_date.value = p.end_date || '';
+    p_monthly.value = p.monthly || '';
+    p_daily.value = p.daily || '';
+    p_hourly.value = p.hourly || '';
+    if (p.department || p.position) {
+        syncPositionPreview();
     }
 
     const modalEl = document.getElementById('viewModal');
@@ -794,6 +820,9 @@ async function deleteEmployeeFromTable(empId) {
 document.getElementById('employeeForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const empNo = inp_emp_no.value.trim();
+    const origEmpNo = document.getElementById('editing_orig_emp_no').value.trim();
+    const isEditMode = origEmpNo !== '';
+
     if (!empNo) return alert('Employee Number is required!');
 
     const btn = document.getElementById('btnSaveEmp');
@@ -822,20 +851,54 @@ document.getElementById('employeeForm').addEventListener('submit', async functio
         photo: pendingPhotoDataUrl || inp_current_photo.value || ''
     };
 
-    const { error: empErr } = await db.from('employees').upsert(empPayload, { onConflict: 'employee_number' });
-    if (empErr) {
-        btn.disabled = false;
-        alert('Error saving employee: ' + empErr.message);
-        return;
+    if (isEditMode) {
+        const { error: updErr } = await db
+            .from('employees')
+            .update(empPayload)
+            .eq('employee_number', origEmpNo);
+
+        if (updErr) {
+            btn.disabled = false;
+            return alert('Error updating employee: ' + updErr.message);
+        }
+
+        if (origEmpNo !== empNo) {
+            await Promise.all([
+                db.from('attendance').update({ employee_number: empNo }).eq('employee_number', origEmpNo),
+                db.from('employee_loans').update({ employee_number: empNo }).eq('employee_number', origEmpNo),
+                db.from('other_income').update({ employee_number: empNo }).eq('employee_number', origEmpNo),
+                db.from('other_deductions').update({ employee_number: empNo }).eq('employee_number', origEmpNo)
+            ]);
+        }
+    } else {
+        const { data: existing } = await db
+            .from('employees')
+            .select('employee_number')
+            .eq('employee_number', empNo)
+            .limit(1);
+
+        if (existing && existing.length > 0) {
+            btn.disabled = false;
+            return alert(`Employee Number "${empNo}" already exists! Gamitin ang VIEW > Edit para i-update ito.`);
+        }
+
+        const { error: insErr } = await db.from('employees').insert(empPayload);
+        if (insErr) {
+            btn.disabled = false;
+            return alert('Error saving employee: ' + insErr.message);
+        }
     }
 
-    await Promise.all([
-        db.from('emergency_contacts').delete().eq('employee_number', empNo),
-        db.from('dependents').delete().eq('employee_number', empNo),
-        db.from('education').delete().eq('employee_number', empNo),
-        db.from('character_references').delete().eq('employee_number', empNo),
-        db.from('employee_positions').delete().eq('employee_number', empNo)
-    ]);
+    const cleanupTargets = isEditMode && origEmpNo !== empNo ? [origEmpNo, empNo] : [empNo];
+    for (const targetNo of cleanupTargets) {
+        await Promise.all([
+            db.from('emergency_contacts').delete().eq('employee_number', targetNo),
+            db.from('dependents').delete().eq('employee_number', targetNo),
+            db.from('education').delete().eq('employee_number', targetNo),
+            db.from('character_references').delete().eq('employee_number', targetNo),
+            db.from('employee_positions').delete().eq('employee_number', targetNo)
+        ]);
+    }
 
     const inserts = [];
     inserts.push(db.from('emergency_contacts').insert({
@@ -875,24 +938,28 @@ document.getElementById('employeeForm').addEventListener('submit', async functio
     });
     if (refRows.length) inserts.push(db.from('character_references').insert(refRows));
 
-    const posDept = document.getElementById('hid_dept')?.value || p_dept.value;
-    const posTitle = document.getElementById('hid_pos')?.value || p_pos.value;
-    if (posDept || posTitle) {
+    if (p_dept.value || p_pos.value) {
         inserts.push(db.from('employee_positions').insert({
             employee_number: empNo,
-            department: posDept,
-            position: posTitle,
-            start_date: (document.getElementById('hid_start')?.value || p_start_date.value) || null,
-            end_date: (document.getElementById('hid_end')?.value || p_end_date.value) || null,
-            monthly: parseFloat(document.getElementById('hid_monthly')?.value || p_monthly.value) || 0,
-            daily: parseFloat(document.getElementById('hid_daily')?.value || p_daily.value) || 0,
-            hourly: parseFloat(document.getElementById('hid_hourly')?.value || p_hourly.value) || 0
+            department: p_dept.value,
+            position: p_pos.value,
+            start_date: p_start_date.value || null,
+            end_date: p_end_date.value || null,
+            monthly: parseFloat(p_monthly.value) || 0,
+            daily: parseFloat(p_daily.value) || 0,
+            hourly: parseFloat(p_hourly.value) || 0
         }));
     }
 
-    await Promise.all(inserts);
+    const results = await Promise.all(inserts);
+    const childErr = results.find(r => r.error);
     btn.disabled = false;
-    alert('Employee Saved Successfully!');
+
+    if (childErr) {
+        return alert('Saved main info, pero may error sa details: ' + childErr.error.message);
+    }
+
+    alert(isEditMode ? 'Employee Updated Successfully!' : 'Employee Saved Successfully!');
     resetEmployeeForm();
 });
 
